@@ -1,0 +1,122 @@
+<apex:page controller="KOGridCtr" sidebar="false">
+<head>
+<apex:includeScript value="{!URLFOR($Resource.KOGrid, '/js/jquery-1.11.0.js')}" />
+
+<!--<apex:includeScript value="{!URLFOR($Resource.KOGrid, '/js/jquery-1.9.1.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.KOGrid, '/js/jquery-ui-1.10.3.custom.min.js')}" />
+          
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> 
+</script> -->
+<apex:includeScript value="{!URLFOR($Resource.KOGrid, '/js/knockout-3.1.js')}" />
+<apex:includeScript value="{!URLFOR($Resource.KOGrid, '/js/knockout_mapping.js')}" />
+<!-- <apex:include pageName="KOGridUtil"/>  -->
+<style type="text/css">
+    .empty_column_content {
+        display: none;
+    }
+    .products{
+    	text-align: center;
+    }
+    .bus{
+    	cursor: pointer;
+    }
+    .hideProducts {
+    	display: none;
+    }
+</style>
+</head>
+<body>
+<apex:form >
+	<script>
+		$(document).ready(function() {
+		/*	var self = this;
+			var FinancialModel = function(financialRecords) {
+				
+				self.jsonToSave = ko.observable("");
+				self.financialRecords= ko.observableArray(ko.utils.arrayMap(financialRecords, function(records){
+					return {isBu: records.isBu, className: records.className, business_unit: records.singleRecord.Business_Unit__c, product: records.singleRecord.Product__c};
+				}));
+			}
+			
+			console.log('financialRecords : ' + {!financialRecordsJson});
+			ko.applyBindings(new FinancialModel({!financialRecordsJson}));
+			console.log('Binding Array Objects: ' + self.financialRecords); */
+		});
+		
+		var childrenToHide;
+		function bu_collapse(obj, childClassName){
+		if(childrenToHide != childClassName) {
+			$('.' + childrenToHide).hide();
+			$('.' + childClassName).show();
+		} else {
+			$('.' + childClassName).toggle();
+		}	
+			childrenToHide = childClassName;
+		}
+		
+		function setHiddenValue(elementId){
+			
+		}
+	</script>
+	
+    <table>   
+        <tr>
+            <td class="label">Fiscal Year: </td>
+            <td class="value">
+                <apex:selectList styleClass="fiscal-year" id="fiscalYear" value="{!chosenFiscalYear}" size="1">
+                    <apex:selectOptions value="{!fiscalYear}"/>
+                </apex:selectList>            
+            </td>
+        </tr>
+        <tr>
+            <td class="label">Product Type: </td>
+            <td class="value">
+                <apex:selectList styleClass="region" id="region" value="{!chosenRegion}" size="1">
+                    <apex:selectOptions value="{!region}"/>
+                </apex:selectList>            
+            </td>
+        </tr>
+    </table>
+
+     <apex:pageBlock title="CDP Financials">
+     	<apex:pageBlockButtons location="top">
+     		<apex:commandButton action="{!saveFinancials}" value="Save" />
+   			<apex:commandButton action="{!updateFinancials}" value="Update" rerender="financialGrid" />
+     	</apex:pageBlockButtons>
+     	<apex:outputPanel id="financialGrid">
+	        <apex:pageBlockTable value="{!financialRecords}" var="record">
+	       <!--  <apex:repeat value="{!financialRecord}" var="record">  -->
+		        <apex:column headerValue="{!record.className}" styleClass="{!IF(NOT(record.isBu), record.className & ' hideProducts products', 'bus')}" onClick="{!IF((record.isBu), record.clickListener, '')}">
+		        	<apex:outputText value="{!IF((record.isBu), record.singleRecord.Business_Unit__c, record.singleRecord.Product__c)}" />
+		        	<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!IF(NOT(record.isBu), record.singleRecord.id, 'bu_hidden')}" />
+		        </apex:column>
+		        <apex:column headerValue="Forcast" styleClass="{!IF(NOT(record.isBu), record.className, '')} {!IF(NOT(record.isBu), 'hideProducts', '')}">
+		        	<apex:inputField value="{!record.singleRecord.X_Plan__c}" onchange="$('#{!record.singleRecord.id}').val('yes')"/>
+		        	<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!record.singleRecord.id}" />
+		        </apex:column>
+		        <apex:column headerValue="Growth" styleClass="{!IF(NOT(record.isBu), record.className, '')} {!IF(NOT(record.isBu), 'hideProducts', '')}">
+		        	<apex:inputField value="{!record.singleRecord.ForcastLastYear__c}" onchange="$('#{!record.singleRecord.id}').val('yes')" />
+		        	<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!record.singleRecord.id}" />
+		        </apex:column> 
+				<apex:column headerValue="X Plan"  styleClass="{!IF(NOT(record.isBu), record.className, '')} {!IF(NOT(record.isBu), 'hideProducts', '')}">
+					<apex:inputField value="{!record.singleRecord.Y_Plan__c}" />
+					<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!record.singleRecord.id}" />
+				</apex:column>
+				<apex:column headerValue="Y Plan"  styleClass="{!IF(NOT(record.isBu), record.className, '')} {!IF(NOT(record.isBu), 'hideProducts', '')}">
+					<apex:inputField value="{!record.singleRecord.Z_Plan__c}" />
+					<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!record.singleRecord.id}" />
+				</apex:column>
+				<apex:column headerValue="Z Plan"  styleClass="{!IF(NOT(record.isBu), record.className, '')} {!IF(NOT(record.isBu), 'hideProducts', '')}">
+					<apex:inputField value="{!record.singleRecord.Total_Plan__c}" />
+					<input id="{!record.singleRecord.id}" value="no" type="hidden" Name="{!record.singleRecord.id}" />
+				</apex:column> 
+		 <!--	</apex:repeat>   -->
+		 <!--	<apex:repeat var="header" value="{!headerList}">
+	      			<apex:column headerValue="{!header}" styleClass="empty_column_content" />
+	   		</apex:repeat>  -->
+	        </apex:pageBlockTable>
+        </apex:outputPanel>
+    </apex:pageBlock>
+</apex:form>
+</body>
+</apex:page>

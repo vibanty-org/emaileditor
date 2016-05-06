@@ -1,0 +1,105 @@
+<apex:page controller="CtrCustomLookup" showHeader="false" sidebar="false">
+<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/jquery-1.11.2.min.js')}" />
+	<script type="text/javascript">
+		var jq_ee = $.noConflict();
+		var to = {};
+		var cc = {};
+		var bcc = {};
+		var recipients = {};
+
+		function buildEmailMap(name, email, Id){
+			var isChecked = jq_ee('.'+Id).is(':checked');
+			if(isChecked){
+				if (!recipients.hasOwnProperty(email)){
+					recipients[email] = name;
+				}
+			} else {
+				if (recipients.hasOwnProperty(email)){
+					delete recipients[email];
+				}
+			}
+		}
+
+		function buildEmailMapForSingleTable(name, email, Id, typ){
+			switch(typ){
+				case 'to':
+					var isCheckedTo = jq_ee('.to_'+Id).is(':checked');
+					toggleRecipientSelection(isCheckedTo, to, email, name);
+					break;
+				case 'cc':
+					var isCheckedCc = jq_ee('.cc_'+Id).is(':checked');
+					toggleRecipientSelection(isCheckedCc, cc, email, name);
+					break;
+				case 'bcc':
+					var isCheckedBcc = jq_ee('.bcc_'+Id).is(':checked');
+					toggleRecipientSelection(isCheckedBcc, bcc, email, name);
+					break;
+			}
+		}
+
+		function toggleRecipientSelection(checked, containerObj, email, name){
+			if(checked){
+				if (!containerObj.hasOwnProperty(email)){
+					containerObj[email] = name;
+				}
+			} else {
+				if (containerObj.hasOwnProperty(email)){
+					delete containerObj[email];
+				}
+			}
+		}
+
+		function passSelectedEmailsFromLookupToCaller(){
+			javascript:top.window.opener.setRecipientEmail(recipients, '{!typ}', 'yes');
+		}
+
+		function passSelectedEmailsFromSingleTableToCaller(){
+			javascript:top.window.opener.setAllRecipients(to, cc, bcc);
+		}
+
+	</script>
+	<apex:sectionHeader title="Email Editor" subtitle="Email Lookup" />
+	<apex:form >
+		<apex:pageBlock title="{!title}" rendered="{!OR(emailEditorConfig[0].Use_Lookups_Only__c, typ == 'from')}">
+			<apex:pageBlockButtons location="top" rendered="{!IF(typ != 'from', true, false)}">
+				<apex:commandButton value="Add" onclick="passSelectedEmailsFromLookupToCaller();"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection columns="1">
+				<apex:repeat value="{!emailAddresses}" var="key" >
+					<apex:outputText value="{!key}:" style="font-weight:bold;" />
+					<apex:pageBlockTable value="{!emailAddresses[key]}" var="listItem">
+						<apex:column >
+							<apex:inputCheckbox value="{!listItem.selected}" rendered="{!IF(typ == 'from', true, false)}" onchange="javascript:top.window.opener.setSenderEmail('{!listItem.record['Name']}', '{!listItem.record['Email']}', 'yes', '{!typ}');" />
+							<apex:inputCheckbox styleClass="{!listItem.record['Id']}" value="{!listItem.selected}" rendered="{!IF(typ != 'from', true, false)}" onchange="buildEmailMap('{!listItem.record['Name']}', '{!listItem.record['Email']}', '{!listItem.record['Id']}');" />
+						</apex:column>
+						<apex:column value="{!listItem.record['Name']}" />
+						<apex:column value="{!listItem.record['Email']}" />
+					</apex:pageBlockTable>
+				</apex:repeat>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		<apex:pageBlock title="{!title}" rendered="{!AND(emailEditorConfig[0].Use_Single_Table_Only__c, typ != 'from')}">
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="Add" onclick="passSelectedEmailsFromSingleTableToCaller();"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection columns="1">
+				<apex:repeat value="{!emailAddresses}" var="key" >
+					<apex:outputText value="{!key}:" style="font-weight:bold;" />
+					<apex:pageBlockTable value="{!emailAddresses[key]}" var="listItem">
+						<apex:column headerValue="to">
+							<apex:inputCheckbox styleClass="to_{!listItem.record['Id']}" value="{!listItem.to}" onchange="buildEmailMapForSingleTable('{!listItem.record['Name']}', '{!listItem.record['Email']}', '{!listItem.record['Id']}', 'to');" />
+						</apex:column>
+						<apex:column headerValue="cc">
+							<apex:inputCheckbox styleClass="cc_{!listItem.record['Id']}" value="{!listItem.cc}" onchange="buildEmailMapForSingleTable('{!listItem.record['Name']}', '{!listItem.record['Email']}', '{!listItem.record['Id']}', 'cc');" />
+						</apex:column>
+						<apex:column headerValue="bcc">
+							<apex:inputCheckbox styleClass="bcc_{!listItem.record['Id']}" value="{!listItem.bcc}" onchange="buildEmailMapForSingleTable('{!listItem.record['Name']}', '{!listItem.record['Email']}', '{!listItem.record['Id']}', 'bcc');" />
+						</apex:column>
+						<apex:column value="{!listItem.record['Name']}" />
+						<apex:column value="{!listItem.record['Email']}" />
+					</apex:pageBlockTable>
+				</apex:repeat>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

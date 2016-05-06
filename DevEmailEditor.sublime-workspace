@@ -1,0 +1,1211 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Ne",
+				"NewsGenerator"
+			],
+			[
+				"Test",
+				"TestDataFactory	[Custom Apex Class]"
+			],
+			[
+				"crea",
+				"PUBLIC createSObject(String objectName) 	SObject"
+			],
+			[
+				"Ts",
+				"TestDataFactory	[Custom Apex Class]"
+			],
+			[
+				"ass",
+				"assertEquals()"
+			],
+			[
+				"st",
+				"PUBLIC stopTest() 	void"
+			],
+			[
+				"Tes",
+				"TestDataFactory	[Custom Apex Class]"
+			],
+			[
+				"Comm",
+				"CommunityOptInLandingPage	[Visualforce Page]"
+			],
+			[
+				"ca",
+				"campaignLead"
+			],
+			[
+				"CO",
+				"COBARegistrationSuccess	[Visualforce Page]"
+			],
+			[
+				"run",
+				"runAs(System.Version_version)"
+			],
+			[
+				"test",
+				"testUser"
+			],
+			[
+				"cam",
+				"campaignMembersApp"
+			],
+			[
+				"upda",
+				"updatePrizeDrawMembership"
+			],
+			[
+				"Agen",
+				"Agenda__c"
+			],
+			[
+				"va",
+				"PUBLIC valueOf(Date d) 	String"
+			],
+			[
+				"Ass",
+				"assertEquals()"
+			],
+			[
+				"le",
+				"LeadId"
+			],
+			[
+				"camp",
+				"campMembers"
+			],
+			[
+				"Cam",
+				"CampaignMember"
+			],
+			[
+				"CamPa",
+				"CampaignMember"
+			],
+			[
+				"Campa",
+				"CampaignMember"
+			],
+			[
+				"jso",
+				"jsonString"
+			],
+			[
+				"Campaign",
+				"CampaignMemberStatus"
+			],
+			[
+				"Cma",
+				"CampaignMemberStatus"
+			],
+			[
+				"Campai",
+				"CampaignId"
+			],
+			[
+				"Lead",
+				"LeadId"
+			],
+			[
+				"l",
+				"lead1"
+			],
+			[
+				"Ca",
+				"CampaignMember"
+			],
+			[
+				"assert",
+				"assertEquals()"
+			],
+			[
+				"Caam",
+				"CampaignMember"
+			],
+			[
+				"up",
+				"updateCountAndStatus"
+			],
+			[
+				"lea",
+				"lead2"
+			],
+			[
+				"lead",
+				"lead1"
+			],
+			[
+				"ts",
+				"test_method_getContent"
+			],
+			[
+				"Res",
+				"RestContext	[Standard Apex Class]"
+			],
+			[
+				"h",
+				"PUBLIC httpMethod"
+			],
+			[
+				"req",
+				"PUBLIC requestURI"
+			],
+			[
+				"runAs",
+				"runAs(User_user_var)"
+			],
+			[
+				"ge",
+				"PUBLIC generateMembeStatus(LIST memberStatuses) 	ContentStatus"
+			],
+			[
+				"ans",
+				"answerOptions"
+			],
+			[
+				"dese",
+				"PUBLIC deserializeStrict(String jsonString, system.Type apexType) 	Object"
+			],
+			[
+				"des",
+				"PUBLIC deserializeUntyped(String jsonString) 	Object"
+			],
+			[
+				"afte",
+				"afterInsert"
+			],
+			[
+				"an",
+				"answerOptions"
+			],
+			[
+				"Agend",
+				"Agenda_Page__c"
+			],
+			[
+				"get",
+				"PUBLIC getCampaign() 	Campaign"
+			],
+			[
+				"age",
+				"agendaCampaign"
+			],
+			[
+				"Camp",
+				"Campaign__c"
+			],
+			[
+				"is",
+				"PUBLIC isNotBlank(String str) 	Boolean"
+			],
+			[
+				"s",
+				"sObj"
+			],
+			[
+				"Li",
+				"LifeEvent_Component__c"
+			],
+			[
+				"S",
+				"SObject	[Standard Apex Class]"
+			],
+			[
+				"SObje",
+				"SObject	[Standard Apex Class]"
+			],
+			[
+				"rec",
+				"recordsToDelete"
+			],
+			[
+				"SOB",
+				"SObjectType"
+			],
+			[
+				"Rec",
+				"RecordType"
+			],
+			[
+				"getReci",
+				"PUBLIC getRecordTypeInfosById() 	MAP<Id,Schema.RecordTypeInfo>"
+			],
+			[
+				"SObject",
+				"SObjectType"
+			],
+			[
+				"Lis",
+				"List	[Standard Apex Class]"
+			],
+			[
+				"pars",
+				"parseInt"
+			],
+			[
+				"sOb",
+				"sObject"
+			],
+			[
+				"pate",
+				"parentRecords"
+			],
+			[
+				"pa",
+				"parentRecords"
+			],
+			[
+				"colum",
+				"columnsParent"
+			],
+			[
+				"parse",
+				"parseFloat"
+			],
+			[
+				"margin",
+				"margin-bottom"
+			],
+			[
+				"mar",
+				"margin-top"
+			],
+			[
+				"pare",
+				"parentRecord"
+			],
+			[
+				"parent",
+				"parentName"
+			],
+			[
+				"co",
+				"columnsChild"
+			],
+			[
+				"ne",
+				"nextParentListOrder"
+			],
+			[
+				"ch",
+				"childRecords"
+			],
+			[
+				"chil",
+				"childRecords"
+			],
+			[
+				"sie",
+				"PUBLIC size() 	Integer"
+			],
+			[
+				"child",
+				"childParts"
+			],
+			[
+				"rt",
+				"rtParts"
+			],
+			[
+				"par",
+				"parentMap"
+			],
+			[
+				"he",
+				"heading_label"
+			],
+			[
+				"head",
+				"heading"
+			],
+			[
+				"devName",
+				"DeveloperName"
+			],
+			[
+				"sav",
+				"saveChanges"
+			],
+			[
+				"e",
+				"equals"
+			],
+			[
+				"chi",
+				"childRecords"
+			],
+			[
+				"So",
+				"SObject	[Standard Apex Class]"
+			],
+			[
+				"SO",
+				"SObject	[Standard Apex Class]"
+			],
+			[
+				"pu",
+				"put"
+			],
+			[
+				"t",
+				"PUBLIC trim() 	String"
+			],
+			[
+				"com",
+				"component"
+			],
+			[
+				"re",
+				"recordTypeName"
+			],
+			[
+				"err",
+				"errorClasses"
+			],
+			[
+				"slds-",
+				"slds-show"
+			],
+			[
+				"r",
+				"records"
+			],
+			[
+				"Compo",
+				"ComponentWrapper"
+			],
+			[
+				"Com",
+				"ComponentWrapper"
+			],
+			[
+				"fiel",
+				"fields"
+			],
+			[
+				"field",
+				"fieldsMap"
+			],
+			[
+				"fie",
+				"fieldsMap"
+			],
+			[
+				"Comp",
+				"ComponentWrapper"
+			],
+			[
+				"CMSLi",
+				"CMSLiteEditorController	[Custom Apex Class]"
+			],
+			[
+				"so",
+				"sobjects"
+			],
+			[
+				"create",
+				"PUBLIC createSObject(String objectName) 	SObject"
+			],
+			[
+				"pri",
+				"prizeDraw"
+			],
+			[
+				"Page",
+				"PageReference	[Standard Apex Class]"
+			],
+			[
+				"Pa",
+				"PageReference	[Standard Apex Class]"
+			],
+			[
+				"R",
+				"Referral_Id__c"
+			],
+			[
+				"reg",
+				"regHelper"
+			],
+			[
+				"add",
+				"addMessage"
+			],
+			[
+				"me",
+				"member"
+			],
+			[
+				"Lae",
+				"Lead_Id__c"
+			],
+			[
+				"Lea",
+				"LeadId"
+			],
+			[
+				"ac",
+				"activePrizeDrawCamp"
+			],
+			[
+				"ele",
+				"else"
+			],
+			[
+				"m",
+				"members"
+			],
+			[
+				"user",
+				"users"
+			],
+			[
+				"Sty",
+				"System	[Standard Apex Class]"
+			],
+			[
+				"d",
+				"dt_now"
+			],
+			[
+				"rep",
+				"PUBLIC replace(String target, String replacement) 	String"
+			],
+			[
+				"vla",
+				"PUBLIC valueOf(Datetime dt) 	String"
+			],
+			[
+				"childrenOfChildrenFields",
+				"childrenOfChildrenFields"
+			],
+			[
+				"childrenFields",
+				"childrenFields"
+			],
+			[
+				"childFields",
+				"childFields"
+			],
+			[
+				"CMSL",
+				"CMSLiteEditorController"
+			],
+			[
+				"Ch",
+				"ChildrenOfChildren__c"
+			],
+			[
+				"Chi",
+				"Children__c"
+			],
+			[
+				"C",
+				"Child__c"
+			],
+			[
+				"Fieldset_Name_C",
+				"Fieldset_Name_ChildrenOfChildren__c"
+			],
+			[
+				"Fieldset_C",
+				"Fieldset_Name_Child__c"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "config/.session",
+			"settings":
+			{
+				"buffer_size": 392,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 147.0,
+		"last_filter": "new ca",
+		"selected_items":
+		[
+			[
+				"new ca",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new vi",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"new vis",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"resou",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"new ",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new page",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"new cl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"new v",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"new tri",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"new cla",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"depoy reso",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new c",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"deploy res",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new visu",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"deploy",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new com",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"deploy re",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"deploy ",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new co",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"create",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"deplo",
+				"MavensMate: Deploy Resource Bundle..."
+			],
+			[
+				"new V",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"new vui",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"depo",
+				"MavensMate: Deploy To Server..."
+			],
+			[
+				"exec",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"execute a",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"new pa",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"new",
+				"MavensMate: New Project..."
+			],
+			[
+				"compon",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"ope",
+				"MavensMate: Open Project..."
+			],
+			[
+				"cl",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"class",
+				"MavensMate: New Apex Class"
+			],
+			[
+				"com",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"componen",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"tes",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"clean",
+				"MavensMate: Clean Project..."
+			],
+			[
+				"bund",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"crea",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"comp",
+				"MavensMate: New Visualforce Component"
+			],
+			[
+				"execu",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"new tr",
+				"MavensMate: New Apex Trigger"
+			],
+			[
+				"execute",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"exceu",
+				"MavensMate: Execute Apex..."
+			],
+			[
+				"visua",
+				"MavensMate: New Visualforce Page"
+			],
+			[
+				"resource",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"resouce",
+				"MavensMate: Create Resource Bundle..."
+			],
+			[
+				"test ",
+				"MavensMate: Run Apex Tests..."
+			],
+			[
+				"Package Control: ",
+				"Package Control: List Packages"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"proje",
+				"MavensMate: New Project..."
+			],
+			[
+				"pac",
+				"Package Control: Install Package"
+			],
+			[
+				"packa",
+				"Preferences: Browse Packages"
+			],
+			[
+				"new pro",
+				"MavensMate: New Project..."
+			],
+			[
+				"new p",
+				"MavensMate: New Project..."
+			]
+		],
+		"width": 539.0
+	},
+	"console":
+	{
+		"height": 272.0,
+		"history":
+		[
+			"install package",
+			"Package Control: Install Package",
+			"import urllib.request,os,hashlib; h = '7183a2d3e96f11eeadd761d777e62404' + 'e330c659d4bb41d3bdf022e94cab3cd0'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://sublime.wbond.net/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/terenceviban/Documents/mavensmate/DevEmailEditor",
+		"/Users/terenceviban/Documents/mavensmate/DevEmailEditor/config"
+	],
+	"file_history":
+	[
+		"/Users/terenceviban/Documents/mavensmate/DevEmailEditor/DevEmailEditor.sublime-project",
+		"/Users/terenceviban/Documents/mavensmate/DevEmailEditor/DevEmailEditor.sublime-settings",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/ForgottenCredentialsControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/ForgotPasswordControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/ForgottenCredentialsController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CommunitiesLoginControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CommunityOptInControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationSuccessControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/Test_ForgottenCredentialsController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CommunityOptInController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationHelperTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/UserHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBACustomLoginControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBAForgotPasswordController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBAForgotPasswordControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationLandingController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationSuccessController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CommunityOptInLandingPage.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationLandingControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LeadHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CommunitiesLandingControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBASiteRegisterControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/UserHandlerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/Test_COBARegistrationHelper.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberPriceDrawServiceTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegistrationHelper.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/OptInREST.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/OptInRESTTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBACustomLoginController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberUpdateServiceTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTContactformTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTContentServiceTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RestNewsServiceTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberAnswerServiceTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-04-25-17.22.30.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/TestWebService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CMSLiteEditorControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CreateCampaignMemberStatusControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/config/.symbols/OptInREST.json",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-23-14.47.46.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/AgendaPageHandlerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberAnswerService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberPriceDrawService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/Test_LeadHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/AgendaPageHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberUpdateService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LeadView.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTContentService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTContactform.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/MappingService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/JsonObjectBuilderTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/ObjectBuilder.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/TestObjectBuilder.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LifeEventArticleHandlerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/JsonObjectBuilder.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CreateCampaignMemberStatusController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBASiteRegisterController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LifeEvent_Article.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CampaignHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CMSLiteEditorController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/components/CMSEditorLabels.component",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CMSLiteEditor.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LifeEvent_NewCampaignController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/CampaignMemberTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CampaignMemberHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CMSVersionController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CreateCampaignMemberStatus.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CMSVersion.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RecordTypeUtil.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBACustomLandingController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/COBACustomLogin.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/COBASiteRegister.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CMSEditorLabels.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/components/SiteFooter.component",
+		"/Users/terenceviban/Desktop/CMS_Editor_Labels.js",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/MyException.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/CMSVersionControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/FaceBookRegHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/TestDataFactory.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/UtilitySet.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/Utils.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/TEST_COBASiteRegisterController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/COBARegisterControllerTest.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-04-01-11.31.48.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-04-01-11.25.20.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-04-01-11.05.38.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/Test_COBARegistrationController.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-31-15.06.26.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-31-13.28.56.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/COBARegistrationSuccess.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-31-10.20.50.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.04.20.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.58.42.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/UserTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/LeadTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.57.48.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.55.56.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.48.57.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-30-15.18.40.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/GenericObjectBuilder.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-23-14.53.07.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/TriggerFactory.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/AgendaPageTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/LifeEventArticleHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/REST_LeadConnector.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/CommunitiesSelfReg.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/pages/COBARegistrationLanding.page",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/ContactPermissionHandler.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/checkRecursive.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/LifeEventArticleTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/CampaignTrigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-15-16.52.59.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-10-16.23.08.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-03-08-04.52.27.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes/RESTCampaignMemberQAndAService.cls",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/triggers/chatter_answers_question_escalation_to_case_trigger.trigger",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-17.12.39.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.54.54.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.49.05.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.33.26.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.26.55.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.22.26.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-16.14.00.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-15.59.12.log",
+		"/Users/terenceviban/Desktop/de.js",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-11.29.52.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-23-09.57.48.log",
+		"/Users/terenceviban/Documents/mavensmate/CoBa Dev/apex-scripts/log/2016-02-18-09.33.06.log"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 138.0,
+		"where_history":
+		[
+			"/Users/terenceviban/Documents/mavensmate/CoBa Dev",
+			"/Users/terenceviban/Documents/mavensmate/CoBa Dev/src/classes",
+			"/Users/terenceviban/Documents/mavensmate/",
+			"/Users/terenceviban/Documents/mavensmate/Email Geek",
+			"/Users/terenceviban/Documents/mavensmate/",
+			"/Users/terenceviban/Documents/mavensmate/Delivery Hero",
+			"/Users/terenceviban/Documents/mavensmate/Delivery Hero/src",
+			"/Users/terenceviban/Documents/mavensmate/LieferHeld/src/classes,/Users/terenceviban/Documents/mavensmate/LieferHeld/src/pages,/Users/terenceviban/Documents/mavensmate/LieferHeld/src/staticresources,/Users/terenceviban/Documents/mavensmate/LieferHeld/src/triggers"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"crlc",
+			"Community_User__c",
+			"PrizeDraw",
+			"handlePrizeDrawEntryForReferrer",
+			"User",
+			"createSObject",
+			"createSObject('User')",
+			"forwardToCustomAuthPage",
+			"leadId",
+			"Contact_permission__c",
+			"PrizeDrawService",
+			"CountAndStatusUpdate",
+			"bookmark",
+			"Community_UserId__c",
+			"House_number__c",
+			"createTask",
+			"createUpdateLeadInformation",
+			"contact_form",
+			"Datetime",
+			"blob",
+			"USer",
+			"profileName",
+			"lifeevent",
+			"System",
+			"getRecordTypeIdByName",
+			"CampaignStatusDefaults__mdt",
+			"Bookmark",
+			"Viewed",
+			"console",
+			"child_select",
+			"closeDialog",
+			"return false",
+			"getChildRecords",
+			"buildDropDownMenu",
+			"getChildRecords",
+			"setRecordType",
+			"buildCreateChildDropDown",
+			"buildDropDown",
+			"isNew",
+			"activate",
+			"getSvgIcon",
+			"cms_lite.records",
+			"currentRecordType",
+			"cms_lite.records",
+			"getHighestListOrder",
+			"buildCreateChildDropDown",
+			"new_child_dropdown",
+			"child_dropdown",
+			"child_dropdown_hint",
+			"buildDropDown",
+			"new_child_dropdown",
+			"buildCreateChildDropDown",
+			"child_dropdown",
+			"sender_options",
+			"Bookmark",
+			"new",
+			"parentId",
+			"getChildRecords",
+			"cms_lite.fields",
+			"$cms_lite.fields",
+			"level_3",
+			"parentId",
+			"saveChanges",
+			"createRecords",
+			"toggleButtonState",
+			"buildComponentTable",
+			"buildDropDown",
+			"valuevalu",
+			"buildInputOutputTextField",
+			"href",
+			"baseUrl",
+			"buildInputOutputTextField",
+			"parentName",
+			"setTimeout",
+			"parentFields",
+			"getTemplate",
+			"buildComponentTable",
+			"parseFloat",
+			"fields",
+			"parent_container",
+			"component_container",
+			"constructCheckbox",
+			"updateRecord",
+			"parentRecord",
+			"button_container",
+			"save_button",
+			"buildInputOutputTextField",
+			"recordTypeName",
+			"parentRecord",
+			"save_error",
+			"showErrorOrSuccessMessage",
+			"save_error",
+			"nextParentListOrder",
+			"parentFields",
+			"ChildTypes",
+			"split",
+			"buildComponentTable",
+			"childTypes",
+			"trim",
+			"determineChildTypes",
+			"cms_lite.isInsert",
+			"buildComponentTable",
+			"component_container",
+			"constructCheckbox",
+			"cms_lite.childFields",
+			"$cms_lite.childFields",
+			"getChildRecords",
+			"cms_lite.fields",
+			"$cms_lite.fields",
+			"spinner_container",
+			"childTypes",
+			"createRecords",
+			"buildCreateChildDropDown",
+			"Mobilfunkvertrag",
+			"Kontaktieren",
+			"es scheint",
+			"updateBannerInfo",
+			"switchContent",
+			"latestVersion",
+			"Asset_Bundle_URL__c",
+			"CMS_Version_Asset_Bundle_URL",
+			"leadCampaignMemberMap",
+			"agendaPageIds",
+			"campaignCampaignMemberMap",
+			"child_new_button",
+			"cms_lite.child",
+			"editorSettings",
+			"getEditorSettings"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": true,
+		"replace_history":
+		[
+			"\n",
+			";\n"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "config/.session",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 392,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 48.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "",
+	"project": "DevEmailEditor.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"",
+				"src/pages/eMailer.page"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 324.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

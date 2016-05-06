@@ -1,0 +1,363 @@
+<apex:page controller="CtrEmailEditorConfiguration" showHeader="true" sidebar="true">
+	<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/jquery-1.11.2.min.js')}" />
+	<style type="text/css">
+		.showsection{
+			display: block;
+		}
+
+		.hideSection {
+			display: none;
+		}
+
+		.settingLink{
+			cursor: pointer;
+			font-weight: bold;
+			border-radius: 15px;
+			text-align: center;
+			height: 20px;
+			padding-top: 5px;
+		}
+
+		.linkBackground {
+			background-color: #999933;
+		}
+
+		.errorMessage{
+			color: red;
+		}
+
+		.inputTextField {
+		    border-radius: 5px;
+		  	border: 1px solid #999933;
+		  	height: 15px;
+		  	/*width: 100%;*/
+		}
+	</style>
+	<script type="text/javascript">
+		var defaultSenderOption;
+		var selectedDefaultOwe;
+		var selectedDefaultOther;
+		var typeInRecipient;
+		var defaultContent;
+		var defaultContentText;
+
+		var jq_ee = $.noConflict();
+		jq_ee(document).ready(function(){
+			showSection('sender');
+			jq_ee('[id$=senderLink]').addClass('linkBackground');
+			defaultSenderOption = '{!defaultSenderOption}';
+			selectedDefaultOwe = '{!orgWideEmail}';
+			selectedDefaultOther = '{!emailEditorConfig[0].FromEmail_Default_Other_Text__c}';
+			typeInRecipient = '{!emailEditorConfig[0].Add_More_Recipents__c}';
+			defaultContent = '{!emailEditorConfig[0].Use_Translatable_Default_Email_Content__c}';
+
+			console.log('READY - selectedDefaultOther : ' + selectedDefaultOther);
+			if(defaultSenderOption == 'default_org'){
+				toggleOrgWideSelection('owde', 'show');
+			} else if(defaultSenderOption == 'other'){
+				toggleOrgWideSelection('ode', 'show');
+			}
+
+			console.log('READY - typeInRecipient : ' + typeInRecipient);
+			console.log('READY - defaultContent : ' + defaultContent);
+			//if(typeInRecipient === true){
+			if(typeInRecipient === 'true'){
+				console.log('READY - typeInRecipient is true : ');
+				toggleOrgWideSelection('possibleRecipients', 'show');
+			}
+			if(defaultContent === 'true'){
+				console.log('READY - defaultContent is true : ');
+				toggleOrgWideSelection('defaultContent', 'show');
+				//toggleElement('defaultContent');
+			}
+		});
+
+		function getSelectedSenderDefault(obj){
+			defaultSenderOption = obj.value;
+			if(obj.value == 'default_org'){
+				toggleOrgWideSelection('owde', 'show');
+				toggleOrgWideSelection('ode', 'hide');
+			} else if(obj.value == 'other'){
+				toggleOrgWideSelection('ode', 'show');
+				toggleOrgWideSelection('owde', 'hide');
+			} else {
+				toggleOrgWideSelection('owde', 'hide');
+				toggleOrgWideSelection('ode', 'hide');
+			}
+			jq_ee('#defaultSenderErrorOrgEmail').hide();
+			jq_ee('#defaultSenderErrorOther').hide();
+		}
+
+		function getSelectedSenderOrgWideEmail(obj){
+			console.log('OWD : ' + obj.value);
+			selectedDefaultOwe = obj.value;
+		}
+
+		function toggleOrgWideSelection(className, flag){
+			if(flag == 'show'){
+				jq_ee('.' + className).show();
+			} else {
+				jq_ee('.' + className).hide();
+			}
+		}
+
+		function toggleElement(className){
+			jq_ee('.' + className).toggle();
+		}
+
+		function saveChanges(){
+			console.log('selectedDefaultOwe : ' + selectedDefaultOwe);
+			console.log('selectedDefaultOther : ' + selectedDefaultOther);
+			console.log('defaultSenderOption : ' + defaultSenderOption);
+			selectedDefaultOther = jq_ee('.defaultSenderText').val();
+			console.log('selectedDefaultOther : ' + selectedDefaultOther);
+			defaultContentText = jq_ee('.defaultContentText').val();
+			console.log('defaultContentText : ' + defaultContentText);
+
+			if(defaultSenderOption == 'default_org' && selectedDefaultOwe == 'none'){
+				jq_ee('#defaultSenderErrorOrgEmail').show();
+				return false;
+			} else if(defaultSenderOption == 'other' && (selectedDefaultOther.length == 0  || selectedDefaultOther === null   || selectedDefaultOther.length === undefined)){
+				jq_ee('#defaultSenderErrorOther').show();
+			} else {
+				jq_ee('#defaultSenderErrorOrgEmail').hide();
+				jq_ee('#defaultSenderErrorOther').hide();
+				save();
+			}
+
+			if (jq_ee('.defaultContentCheckbox' ).prop("checked") && (defaultContentText.length == 0  || defaultContentText === null   || defaultContentText.length === undefined)){
+				jq_ee('#defaultContentError').show();
+			} else {
+				jq_ee('#defaultContentError').hide();
+			}
+		}
+
+		function showSection(id){
+			console.log('id : ' + id);
+			jq_ee('.sections').removeClass('showSection');
+			jq_ee('.sections').addClass('hideSection');
+			jq_ee('#' + id + 'Settings').removeClass('hideSection');
+			jq_ee('#' + id + 'Settings').removeClass('showSection');
+			jq_ee('.settingLink').removeClass('linkBackground');
+			jq_ee('[id$=' + id + 'Link]').addClass('linkBackground');
+		}
+	</script>
+	<apex:sectionHeader title="Email Editor" subtitle="Settings" />
+	<apex:form >
+		<apex:actionFunction name="save" action="{!save}" status="LoadingStatusWheel" reRender="settings" />
+		<apex:pageBlock >
+			<apex:pageBlockButtons location="top">
+				<!-- <apex:commandButton action="{!save}" value="save" reRender="settings" status="LoadingStatusWheel" /> -->
+				<apex:commandButton value="save" onclick="saveChanges(); return false;" />
+				<apex:commandButton action="{!cancel}" value="cancel" reRender="settings" status="LoadingStatusWheel"/>
+			</apex:pageBlockButtons>
+			<apex:pageBlockSection columns="1"> 
+				<apex:outputPanel >
+					<apex:outputText value="Show options on the email editor as well : " />
+					<apex:inputCheckbox value="{!showOptionsOnEditor}" />
+				</apex:outputPanel>
+			</apex:pageBlockSection> 
+			<apex:outputPanel />
+			<apex:pageBlockSection columns="1"> 
+				<table style="width:100%">
+				<tr>
+					<td style="width:20%">
+						<table>
+						    <tr>
+							    <td>
+							    	<apex:outputPanel layout="block" styleClass="settingLink" id="senderLink" onclick="showSection('sender');">
+										<apex:outputText value="Sender Settings"  />
+									</apex:outputPanel>
+							    </td>
+						    </tr>
+						    <tr>
+						     	<td>
+							    	<apex:outputPanel layout="block" styleClass="settingLink" id="recipientLink" onclick="showSection('recipient');">
+										<apex:outputText value="Recipient Settings" />
+									</apex:outputPanel>
+							    </td>
+						    </tr>
+						    <tr>
+						    	<td>
+							    	<apex:outputPanel layout="block" styleClass="settingLink" id="templateLink" onclick="showSection('template');">
+										<apex:outputText value="Template Settings" />
+									</apex:outputPanel>
+							    </td>
+							</tr>
+							<tr>
+								<td>
+							    	<apex:outputPanel layout="block" styleClass="settingLink" id="contentLink" onclick="showSection('content');">
+										<apex:outputText value="Content Settings" />
+									</apex:outputPanel>
+							    </td>
+							</tr>
+							<tr>
+								<td>
+							    	<apex:outputPanel layout="block" styleClass="settingLink" id="attachmentLink" onclick="showSection('attachment');">
+										<apex:outputText value="Attachment Settings" />
+									</apex:outputPanel>
+							    </td>
+							</tr>
+						</table>
+					</td>
+					<td style="width:10%; height:100%"></td>
+					<td style="width:70%">
+					    <table class="sections" id="senderSettings">
+						    <tr>
+						    	<td>
+						    		<!-- <apex:outputPanel>
+										<apex:outputText value="Sender & Recipient Settings :" style="font-weight: bold;"/>
+									</apex:outputPanel> -->
+
+									<apex:panelGrid columns="2" rules="row">
+										<apex:outputText value="Sender address options : " />
+										<apex:selectRadio value="{!senderOption}" layout="pageDirection">
+											<apex:selectOptions value="{!senderOptions}"/>
+										</apex:selectRadio>
+										<apex:outputText value="Default sender address options : " />
+										<apex:selectRadio value="{!defaultSenderOption}" layout="pageDirection"  onchange="getSelectedSenderDefault(this);">
+											<apex:selectOptions value="{!defaultSenderOptions}"/>
+										</apex:selectRadio>
+
+										<apex:outputText styleClass="owde" style="display:none;" value="Default Org Wide Email : " />
+										<apex:panelGroup layout="block" styleClass="owde" style="display:none;">
+											<div class = "requiredInput">
+												<div class = "requiredBlock"></div>
+												<apex:selectList multiselect="false" size="1" rendered="{!IF(orgWideEmailDoesNotExist, false, true)}" value="{!orgWideEmail}" onchange="getSelectedSenderOrgWideEmail(this);">
+													<apex:selectOptions value="{!orgWideEmails}"/>
+												</apex:selectList>
+												<apex:outputText rendered="{!IF(orgWideEmailDoesNotExist, true, false)}" value="No Org Wide email addresses have been configured for this org" />
+											</div>
+											<div id="defaultSenderErrorOrgEmail" class="errorMessage" style="display:none;"> Error: please select the default org email!</div>
+										</apex:panelGroup>
+
+										<apex:outputText styleClass="ode" style="display:none;" value="Other Default Email / Sender Name : " />
+										<apex:panelGroup layout="block" styleClass="ode" style="display:none;">
+											<div class = "requiredInput">
+												<div class = "requiredBlock"></div>
+												<!-- <apex:inputText value="{!emailEditorConfig[0].FromEmail_Default_Other_Text__c}" rendered="{emailEditorConfig[0].FromEmail_Default_Other__c}" /> -->
+												<apex:inputText value="{!emailEditorConfig[0].FromEmail_Default_Other_Text__c}" styleClass="inputTextField defaultSenderText" style="width:300px;"/>
+											</div>
+											<div id="defaultSenderErrorOther" class="errorMessage" style="display:none;"> Error: please specify an alternative sender email address</div>
+										</apex:panelGroup>
+									</apex:panelGrid>
+						    	
+						    	</td>
+						    </tr>
+					    </table>
+					    <table class="sections" id="recipientSettings">
+						    <tr>
+							    <td>
+							    	<apex:panelGrid columns="2" rules="row">
+								    	<apex:outputText value="Recipient address options : " />
+										<apex:selectRadio value="{!toEmailOption}" layout="pageDirection">
+											<apex:selectOptions value="{!toEmailOptions}"/>
+										</apex:selectRadio>
+										<apex:outputText value="Add recipients option : " />
+								    	<apex:selectRadio value="{!uiOption}" layout="pageDirection">
+											<apex:selectOptions value="{!uiOptions}"/>
+										</apex:selectRadio>
+										<apex:outputText value="Input of more recipients via keyboard : " />
+										<!-- <apex:inputCheckbox value="{!moreRecipients}" />  -->
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Add_More_Recipents__c}" onchange="toggleElement('possibleRecipients');"/> 
+										<!-- <apex:outputText value="Number of possible recipients that can be type in at once: " />
+										<apex:inputText value="{!possibleNumberOfAdditionalRecipients}" /> -->
+
+
+										<apex:outputText styleClass="possibleRecipients" style="display:none;" value="Number of possible recipients that can be type in at once: " />
+										<apex:panelGroup layout="block" styleClass="possibleRecipients" style="display:none;">
+											<!-- <div class = "requiredInput">
+												<div class = "requiredBlock"></div> -->
+												<!-- <apex:inputText value="{!emailEditorConfig[0].FromEmail_Default_Other_Text__c}" rendered="{emailEditorConfig[0].FromEmail_Default_Other__c}" /> -->
+												<apex:inputText value="{!emailEditorConfig[0].Number_Of_More_Recipients__c}" styleClass="inputTextField" style="width:100px;"/>
+											<!-- </div> -->
+										</apex:panelGroup>
+
+									</apex:panelGrid>
+							    </td>
+						    </tr>
+					    </table>
+					    <table class="sections" id="templateSettings">
+						    <tr>
+							    <td>
+							    	<apex:panelGrid columns="2" rules="row">
+										<apex:outputText value="Allow relatedTo selection :" /> 
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Related_To_Selection__c}" />
+										<apex:outputText value="Default Object :"  /> 
+										<apex:selectList value="{!selectedObject}" multiselect="false" size="1">
+											<apex:selectOptions value="{!objectNames}" />
+										</apex:selectList> 
+										<apex:outputText value="Allow template selection :" /> 
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Template_Use__c}"/> 
+										<apex:outputText value="Allow folder selection on page :" /> 
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Show_Folder_Selection__c}" />
+										<apex:outputText value="Select default folder : " />
+										<apex:selectList value="{!selectedDefaultFolder}" multiselect="false" size="1" >
+											<apex:selectOptions value="{!defaultFolder}"/>
+										</apex:selectList>
+										<apex:outputText value="Select default Recipient Type : " />
+										<apex:selectList value="{!defaultRecipientType}" multiselect="false" size="1" >
+											<apex:selectOptions value="{!defaultRecipientTypeOptions}"/>
+										</apex:selectList>
+									</apex:panelGrid>
+							    </td>
+						    </tr>
+					    </table>
+					    <table class="sections" id="contentSettings">
+						    <tr>
+						    	<td>
+						    		<apex:panelGrid columns="2" rules="row">
+										<apex:outputText value="Use default content : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Use_Translatable_Default_Email_Content__c}" onchange="toggleElement('defaultContent');" styleClass="defaultContentCheckbox"/>
+										
+										<apex:outputLabel value="Default content label : " styleClass="defaultContent" style="display:none;" />
+										<apex:panelGroup layout="block" styleClass="defaultContent" style="display:none;">
+											<div class = "requiredInput">
+												<div class = "requiredBlock"></div>
+												<apex:inputText value="{!emailEditorConfig[0].Translatable_Default_Email_Content__c}" styleClass="inputTextField defaultContentText" style="width:200px;" />
+											</div>
+											<div id="defaultContentError" class="errorMessage" style="display:none;"> Error: please specify a custom label that will be used as a default content</div>
+										</apex:panelGroup>
+
+										<!-- <apex:outputText styleClass="defaultContent" value="Default content label : " />
+										<apex:inputText styleClass="defaultContent"  value="{!defaultContentLabel}" styleClass="inputTextField" style="width:300px;"/> -->
+										<apex:outputText value="Save email as activity history : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Save_As_Activity__c}" />
+									</apex:panelGrid>
+						    	</td>
+						    </tr>
+					    </table>
+					    <table class="sections" id="attachmentSettings">
+						    <tr>
+							    <td>
+							    	<apex:panelGrid columns="2" rules="row">
+										<apex:outputLabel value="Allow attachments : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Attachments__c}" />
+										<apex:outputLabel value="Allow attachment selection via lookup : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Attachment_Selection__c}" />
+										<apex:outputLabel value="Automatically attach all documents on record : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Automatically_Attach_Documents__c}" />
+										<!-- <apex:outputText value="Attachment options : " />
+										<apex:selectRadio value="{!attachmentOpt}" layout="pageDirection">
+											<apex:selectOptions value="{!attachmentOptions}"/>
+										</apex:selectRadio> -->
+										<apex:outputLabel value="Allow document selection via lookup : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Document_Selection__c}" /> 
+										<apex:outputLabel value="Allow document upload : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Allow_Document_Upload__c}" />
+										<apex:outputLabel value="Number of documents to upload at once : " />
+										<apex:inputText value="{!numberOfFilesToUpload}" styleClass="inputTextField" style="width:100px;"/>
+										<apex:outputText value="Save documents as attachments : " />
+										<apex:inputCheckbox value="{!emailEditorConfig[0].Attach_New_Documents_To_Object__c}" />
+									</apex:panelGrid>
+							    </td>
+						    </tr>
+					    </table>
+					</td>
+				</tr>
+				</table>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+		<c:LoadingStatusWheel />
+	</apex:form>
+</apex:page>

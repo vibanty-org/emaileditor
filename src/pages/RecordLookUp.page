@@ -1,0 +1,194 @@
+<apex:page controller="CtrRecordLookUp" showHeader="false" sidebar="false">
+<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/jquery-1.11.2.min.js')}" />		
+	<script type="text/javascript">
+		var jq_ee = $.noConflict();
+		var choosenFields = [];
+		var docs = [];
+		var files = {};
+		var totalDocSize = 0;
+		var totalAttSize = 0;
+		var selectedFiles = '{!selectedFiles}';
+
+		function performSearchOnKeyPress(evt){
+	        var code = (evt.keyCode ? evt.keyCode : evt.which);
+	        if(code == 13){
+	        	performSearch();
+	        }
+	        
+	        if (code == 13) {
+		       if (evt.preventDefault) {
+		           evt.preventDefault();
+		       } else {
+		           evt.returnValue = false;
+		       }
+		   }
+	    }
+
+	    function addToChoosenFields(fLabel, pos){
+	    	var isChecked = jq_ee('.field_' + pos).is(':checked');
+			if(isChecked){
+			    choosenFields.push({field:fLabel});
+			} else {
+				console.log('fLabel : ' + fLabel);
+			    choosenFields.splice(jq_ee.inArray(fLabel, choosenFields),1);
+				
+			}
+	    }
+
+	    function toggleFileAdd(Id, name, pos, size){
+	    	var isChecked = jq_ee('.{!typ}_' + pos).is(':checked');
+	    	modifySelectedFiles(Id, isChecked);
+			if(isChecked){
+				if (!files.hasOwnProperty(Id)){
+					files[Id] = name;
+					files[Id + '_' + size] = size;
+				}
+			} else {
+				if (files.hasOwnProperty(Id)){
+					delete files[Id];
+					delete files[Id + '_' + size];
+				}
+			}
+	    }
+
+	    function passSelectedFieldsToCaller(){
+			javascript:top.window.opener.setSelectedFields(choosenFields);
+		}
+
+		function passSelectedToCaller(folderId){
+			javascript:top.window.opener.setSelectedFiles(files, '{!typ}', selectedFiles, folderId, true);
+		}
+
+		function modifySelectedFiles(Id, isChecked){
+			var idArr;
+			if(selectedFiles.length > 0){
+				idArr = selectedFiles.split(',');
+			} else {
+				idArr = [];
+			}
+
+			if(!isChecked){
+				selectedFiles = '';
+				var index = idArr.indexOf(Id);
+				if (index > -1) {
+				    idArr.splice(index, 1);
+				}
+				selectedFiles = idArr.join();
+			} else {
+				selectedFiles = '';
+				idArr.push(Id);
+				selectedFiles = idArr.join();
+			}
+		}
+
+		function valueExist(fLabel){
+			for(i = 0; i < choosenFields.length; i++){
+				if(choosenFields[i] === fLabel){
+					return true;
+				}
+			}
+			return false;
+		}
+    </script>
+    <apex:sectionHeader title="Email Editor" subtitle="Record Lookup" />
+    <apex:pageMessages id="messages"/>
+	<apex:form >
+		
+		<apex:actionFunction name="performSearch" action="{!performSearch}" status="searching" rerender="recSearchResults, messages" />
+		<apex:actionFunction name="getDocuments" action="{!buildDocumentList}" status="searching" reRender="documentBlock, messages" />
+		<apex:pageBlock rendered="{!records != null}">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Cancel" onclick="javascript:top.window.opener.closeLookUp();"/>
+			</apex:pageBlockButtons>
+			<apex:outputPanel layout="block" style="margin:5px;padding:10px;padding-top:2px;">
+				<apex:actionStatus id="searching" startText=" Searching ... " />
+				<apex:outputPanel id="top" layout="block" style="margin:5px;padding:10px;padding-top:2px;">
+		            <apex:outputLabel value="Search" style="font-weight:Bold;padding-right:10px;" for="txtSearch"/>
+		            <apex:inputText id="txtSearch" value="{!searchString}"  onkeyPress="performSearchOnKeyPress(event);" />
+		            <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="performSearch();"/>
+		        </apex:outputPanel>
+		        
+		        <apex:outputPanel style="margin:10px;height:450px;overflow-Y:auto;" layout="block">
+		            <apex:pageBlock id="recSearchResults">
+		                <apex:pageBlockTable value="{!records}" var="record">
+		                	<apex:column value="{!record.Id}" rendered="{!IF(selectedFields.size == 0 , true, false)}" />
+		                	<apex:repeat value="{!selectedFields}" var="fieldLabel">  
+			                    <apex:column value="{!record[fieldLabel]}" onclick="javascript:top.window.opener.lookUpSelectedUser('{!record.Id}', '{!record[fieldLabel]}', '{!fieldLabel}');" style="cursor: pointer;"/>  
+			                </apex:repeat> 
+		                </apex:pageBlockTable>
+		            </apex:pageBlock>
+	          	</apex:outputPanel>
+			</apex:outputPanel>
+		</apex:pageBlock>
+		<apex:pageBlock rendered="{!objectFields != null}" >
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Cancel" onclick="javascript:top.window.opener.closeLookUp();"/>
+				<apex:commandButton value="Choose" onclick="passSelectedFieldsToCaller();"/>
+			</apex:pageBlockButtons>
+		        <apex:outputPanel style="margin:10px;height:450px;overflow-Y:auto;" layout="block">
+		        <apex:actionStatus id="searching" startText=" Searching ... " />
+		            <apex:pageBlock id="fieldsResults">
+		              	<apex:pageBlockTable value="{!objectFields}" var="field">
+			                <apex:column headerValue="Selected">
+			                    <apex:inputCheckbox value="{!field.selected}" styleClass="field_{!field.position}" onchange="addToChoosenFields('{!field.fieldName}', '{!field.position}'); return false;" />
+			                </apex:column>
+			                <apex:column headerValue="Field Name">
+			                    <apex:outputText value="{!field.fieldName}" />
+			                </apex:column>
+		                </apex:pageBlockTable>
+		            </apex:pageBlock>
+			</apex:outputPanel>
+		</apex:pageBlock>
+		<apex:pageBlock rendered="{!folders != null}" id="documentBlock">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Cancel" onclick="javascript:top.window.opener.closeLookUp();"/>
+				<apex:commandButton value="Select" onclick="passSelectedToCaller('{!folderId}');"/>
+			</apex:pageBlockButtons>
+		        <apex:outputPanel style="margin:10px;height:450px;overflow-Y:auto;" layout="block">
+		        <apex:outputLabel value="Choose Folder" /> 
+				<apex:selectList value="{!folderId}" multiselect="false" size="1" onchange="getDocuments();">
+		            <apex:selectOptions value="{!folders}"/>
+		        </apex:selectList>
+		        <br />
+		        <br />
+		        <apex:actionStatus id="searching" startText=" Searching ... " />
+		            <apex:pageBlock id="documentResults">
+		              	<apex:pageBlockTable value="{!documentList}" var="doc">
+			                <apex:column headerValue="Selected">
+			                    <apex:inputCheckbox value="{!doc.selected}" styleClass="{!typ}_{!doc.position}" onchange="toggleFileAdd('{!doc.documentId}', '{!doc.documentName}', '{!doc.position}', '{!doc.docSize}'); return false;" />
+			                </apex:column>
+			                <apex:column headerValue="Document Name">
+			                    <apex:outputText value="{!doc.documentName}" />
+			                </apex:column>
+		                </apex:pageBlockTable>
+		            </apex:pageBlock>
+			</apex:outputPanel>
+		</apex:pageBlock>
+		<apex:pageBlock rendered="{!attachmentList != null}">
+			<apex:pageBlockButtons >
+				<apex:commandButton value="Cancel" onclick="javascript:top.window.opener.closeLookUp();"/>
+				<apex:commandButton value="Select" onclick="passSelectedToCaller('{!folderId}');"/>
+			</apex:pageBlockButtons>
+	        <apex:outputPanel style="margin:10px;height:450px;overflow-Y:auto;" layout="block">
+	        <apex:actionStatus id="searching" startText=" Searching ... " />
+	            <apex:pageBlock id="attachmentResults">
+	              	<apex:pageBlockTable value="{!attachmentList}" var="attachment">
+		                <apex:column headerValue="Selected">
+		                    <apex:inputCheckbox value="{!attachment.selected}" styleClass="{!typ}_{!attachment.position}" onchange="toggleFileAdd('{!attachment.attachmentId}', '{!attachment.attachmentName}', '{!attachment.position}', '{!attachment.docSize}'); return false;" />
+		                </apex:column>
+		                <apex:column headerValue="Attachment Name">
+		                    <apex:outputText value="{!attachment.attachmentName}" />
+		                </apex:column>
+	                </apex:pageBlockTable>
+	            </apex:pageBlock>
+			</apex:outputPanel>
+		</apex:pageBlock>
+		<apex:pageBlock rendered="{!recipients != null}">
+			<apex:pageBlockTable value="{!recipients}" var="record">
+				<apex:column value="{!record['Name']}" onclick="javascript:top.window.opener.setSelectedRecipient('{!record['Id']}', '{!record['Name']}');" style="cursor:pointer;"/>
+				<apex:column value="{!record['Email']}" onclick="javascript:top.window.opener.setSelectedRecipient('{!record['Id']}', '{!record['Name']}');" style="cursor:pointer;" />
+			</apex:pageBlockTable>
+		</apex:pageBlock>
+	</apex:form>
+	
+</apex:page>

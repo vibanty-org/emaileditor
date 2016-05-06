@@ -1,0 +1,1716 @@
+<apex:page controller="CtrEmailEditor" showHeader="true" sidebar="true" tabStyle="Email_Editor__tab">
+	<!--<script>
+	  window.CKEDITOR_BASEPATH = 'https://'+window.location.hostname+ '/resource/1425622508000/EmailEditor/js/';
+	  console.log('BASE PATH: https://'+window.location.hostname+ '/resource/1425622508000/EmailEditor/js/ckeditor.js' );
+	</script> -->
+	<!-- <apex:stylesheet value="{!URLFOR($Resource.EmailEditor, '/css/bootstrap.min.css')}" /> -->
+	<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/jquery-1.11.2.min.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/ckeditor/ckeditor.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/bootstrap.min.js')}" />
+	<apex:includeScript value="{!URLFOR($Resource.EmailEditor, '/js/bootbox.min.js')}" />
+	
+	<script type="text/javascript">
+		var jq_ee = $.noConflict();
+        
+        jq_ee(document).ready(function() {
+        	CKEDITOR.replace( 'contentContainer');
+        	//disableRecordLookup();
+        	setObjectName();
+        	jq_ee('td.relatedToSection').parent().hide();
+        	var attachmentJson = {!attachmentJsonString};
+        	processAttachmentJson(attachmentJson);
+        	whatId = '{!whatId}';
+        	/*jq_ee(".inputfile").change(function () {
+        		console.log('FILE SIZE: ' +  this.files[0].size);
+        	});*/
+        	//requireCssFile('/resource/EmailEditor/css/bootstrap.min.css');
+
+        });
+        //var CKEDITOR_BASEPATH = 'https://'+window.location.hostname+ '/resource/1425622508000/EmailEditor/js/';
+		var senderOption = '';
+		var recipientOption = '';
+		var ccbccOption = '';
+		var singleTableOption = '';
+		var popUpLookUp;  
+		var senderSelectedAddresses = '';
+		var toRecipientSelectedAddresses = '';
+		var ccRecipientSelectedAddresses = '';
+		var bccRecipientSelectedAddresses = '';
+		var selectedDocs = '';
+		var selectedAtts = '';
+		var singleTable = false;
+		var toObj = [];
+		var ccObj = [];
+		var bccObj = [];
+		var docObj = [];
+		var attObj = [];
+		var objName = '';
+		var searchFields = '';
+		var folderId = '';
+		var files = {};
+		var totalDocSizeInBytes = 0;
+		var totalAttSizeInBytes = 0;
+		var fileUpload = 0;
+		var attachmentNo = 3;
+		var uploadedFiles = {};
+		var totalFileSize = 0;
+		var selectedRecipientId = '';
+		//var selectedTemplate = '';
+		var selectedEmailTemplateId = '';
+		var faultyEmails = [];
+		var whatId = '';
+
+		function emailService(){
+			/*console.log('@@@@ SendEmail - senderSelectedAddresses : ' + senderSelectedAddresses);
+			console.log('@@@@ SendEmail - toRecipientSelectedAddresses : ' + toRecipientSelectedAddresses);
+			console.log('@@@@ SendEmail - ccRecipientSelectedAddresses : ' + ccRecipientSelectedAddresses);
+			console.log('@@@@ SendEmail - bccRecipientSelectedAddresses : ' + bccRecipientSelectedAddresses);*/
+			/*var allEmailAddresses = '';
+			var emailArr = [];
+
+			if(toRecipientSelectedAddresses.length != 0){
+				console.log('All Email toRecipientSelectedAddresses : ' + toRecipientSelectedAddresses);
+				allEmailAddresses = toRecipientSelectedAddresses;
+			}
+			if(allEmailAddresses && ccRecipientSelectedAddresses.length != 0){
+				console.log('All Email ccRecipientSelectedAddresses : ' + ccRecipientSelectedAddresses);
+				allEmailAddresses += ',' + ccRecipientSelectedAddresses;
+			}
+
+			if(allEmailAddresses && bccRecipientSelectedAddresses.length != 0){
+				console.log('All Email bccRecipientSelectedAddresses : ' + bccRecipientSelectedAddresses);
+				allEmailAddresses += ',' + bccRecipientSelectedAddresses;
+			}
+			
+			if(allEmailAddresses.length != 0){
+				emailArr = allEmailAddresses.split(',');
+			}
+
+			console.log('All Email emailArr : ' + emailArr);
+			var faultyEmails = [];
+			if(emailArr.length > 0){
+				jq_ee.each(emailArr, function(index, email){
+					if(!validateEmail(email)){
+						faultyEmails.push(email);
+				  	}
+				});
+ 			}
+ 			console.log('All Email faultyEmails : ' + faultyEmails);
+ 			
+			if(faultyEmails.length > 0 && (selectedEmailTemplateId !== 'undefined' && selectedEmailTemplateId.length != 0 && (selectedRecipientId === 'undefined' || selectedRecipientId.length == 0))){
+					console.log('Condition : wrong_email_missing_target_error ');
+					buildErrorMessage('wrong_email_missing_target_error', faultyEmails);
+					return;
+			} else if(faultyEmails.length == 0 && (selectedEmailTemplateId !== 'undefined' && selectedEmailTemplateId.length != 0 && (selectedRecipientId === 'undefined' || selectedRecipientId.length == 0))){
+				console.log('Condition : missing_target_error ');
+					buildErrorMessage('missing_target_error', faultyEmails);
+					return;
+			} else if(faultyEmails.length > 0 && ((selectedEmailTemplateId === 'undefined' || selectedEmailTemplateId.length == 0) || 
+				(selectedEmailTemplateId !== 'undefined' && selectedEmailTemplateId.length != 0 && selectedRecipientId !== 'undefined' && selectedRecipientId.length != 0))){
+					console.log('Condition : wrong_email__error ');
+					buildErrorMessage('wrong_email__error', faultyEmails);
+					return;
+			} else { 
+				jq_ee('input[id$=fromBinding]').val('');
+				jq_ee('input[id$=toBinding]').val('');
+				jq_ee('input[id$=ccBinding]').val('');
+				jq_ee('input[id$=bccBinding]').val('');
+
+				jq_ee('input[id$=fromBinding]').val(senderSelectedAddresses);
+				jq_ee('input[id$=toBinding]').val(toRecipientSelectedAddresses);
+				jq_ee('input[id$=ccBinding]').val(ccRecipientSelectedAddresses);
+				jq_ee('input[id$=bccBinding]').val(bccRecipientSelectedAddresses);
+				//sendEmail();
+			}*/
+			console.log('All Email toRecipientSelectedAddresses : ' + toRecipientSelectedAddresses);
+			if(toRecipientSelectedAddresses.length == 0){
+				console.log('All Email toRecipientSelectedAddresses : ' + toRecipientSelectedAddresses);
+				jq_ee('.noToEmail').show();
+				return;
+			} else {
+				jq_ee('.noToEmail').hide();
+			}
+
+			console.log('Selected Email Template : ' + selectedEmailTemplateId);
+			console.log('Selected Recipient Id : ' + selectedRecipientId);
+			if(selectedEmailTemplateId !== 'undefined' && selectedEmailTemplateId.length != 0 && (selectedRecipientId === 'undefined' || selectedRecipientId.length == 0)){
+				//buildErrorMessage('missing_target_error', faultyEmails);
+				jq_ee('.recipientWarning').show();
+				jq_ee('.recipientWarning').removeClass('warningMessage');
+				jq_ee('.recipientWarning').addClass('errorMessage');
+				return;
+			} else {
+				jq_ee('.recipientWarning').hide();
+			}
+
+			var sizeInBytes = jq_ee('.actualSize').html();
+			/*var sizeInt = parseInt(sizeInBytes.substring(0, (sizeInBytes.length - 3)), 10);
+			var unit = sizeInBytes.substring(sizeInBytes.length - 2);*/
+			console.log(' sizeInBytes: ' + sizeInBytes);
+			/*console.log(' sizeInt : ' + sizeInt);
+			console.log(' unit : ' + unit);*/
+		
+			if(sizeInBytes !== 'undefined' && sizeInBytes.length > 0){
+				var sizeInt = parseInt(sizeInBytes.substring(0, (sizeInBytes.length - 3)), 10);
+				var unit = sizeInBytes.substring(sizeInBytes.length - 2);
+				console.log(' sizeInt : ' + sizeInt);
+				console.log(' unit : ' + unit);
+				if(sizeInt >= 10 && unit == 'MB'){
+					jq_ee('.documentSizeError').show();
+					var top = jq_ee('.documentSizeError').position().top;
+					jq_ee(window).scrollTop(top);
+					return;
+				} else {
+					jq_ee('.documentSizeError').hide();
+				}
+			}
+			
+			return;
+
+			console.log('Documents : ' + selectedDocs);
+
+			jq_ee('input[id$=fromBinding]').val('');
+			jq_ee('input[id$=toBinding]').val('');
+			jq_ee('input[id$=ccBinding]').val('');
+			jq_ee('input[id$=bccBinding]').val('');
+			jq_ee('input[id$=selectedAttsBinding]').val('');
+			jq_ee('input[id$=selectedDocsBinding]').val('');
+
+			jq_ee('input[id$=fromBinding]').val(senderSelectedAddresses);
+			jq_ee('input[id$=toBinding]').val(toRecipientSelectedAddresses);
+			jq_ee('input[id$=ccBinding]').val(ccRecipientSelectedAddresses);
+			jq_ee('input[id$=bccBinding]').val(bccRecipientSelectedAddresses);
+			jq_ee('input[id$=selectedAttsBinding]').val(selectedAtts);
+			jq_ee('input[id$=selectedDocsBinding]').val(selectedDocs);
+			sendEmail();
+			return false;
+		}
+
+		function validateEmail(sEmail) {
+		    var filter = /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,6}|[0-9]{1,3})(\]?)$/;
+		    if (filter.test(sEmail)) {
+		        return true;
+		    }else {
+		        return false;
+		    }
+		}
+
+		function buildErrorMessage(flag, faultyEmails){
+			var errorMessage = '';
+			switch(flag){
+				case 'wrong_email__error':
+				//var wrongEmails = '';
+					errorMessage += 'Please correct the following email addresses and try again <br /> <ul>';
+	 				jq_ee.each(faultyEmails, function(index, email){
+	 					errorMessage += '<li>' + email + '</li>';
+	 					wrongEmails += email + ', ';
+	 				})
+					errorMessage += '</ul>';
+					/*jq_ee('.wrongEmails').val(wrongEmails);
+					jq_ee('.wrongEmails').show();*/
+				break;
+				case 'missing_target_error':
+					errorMessage += 'Select the "Recipient Type" and use the lookup to specify the "Selected Recipient" <br /><br />';
+					errorMessage += '<strong>Hint: </strong><br /><br />'
+					errorMessage += 'If you select a template, you have to specify the contact, lead or user to which the email will be sent. <br />';
+					errorMessage += 'This sets the context and ensures that merge fields in the template contain the correct data. <br />';
+				break;
+				case 'wrong_email_missing_target_error':
+					errorMessage += 'Please correct the following errors and try again <br />';
+					errorMessage += '1.)<br />'
+					errorMessage += 'The following email addr are incorrect <br /> <ul>';
+					jq_ee.each(faultyEmails, function(index, email){
+	 					errorMessage += '<li>' + email + '</li>';
+	 				})
+					errorMessage += '</ul><br /><br />';
+
+					errorMessage += '2.)<br />'
+					errorMessage += 'Select the "Recipient Type" and use the lookup to specify the "Selected Recipient" <br /><br />';
+					errorMessage += '<strong>Hint: </strong><br /><br />'
+					errorMessage += 'If you select a template, you have to specify the contact, lead or user to which the email will be sent. <br />';
+					errorMessage += 'This sets the context and ensures that merge fields in the template contain the correct data. <br />';
+
+				break;
+			}
+			bootbox.alert(errorMessage);
+			return;
+		}
+
+		function popupwindow(title, w, h, typ) {  
+			var opt = '';
+			if(typ != 'all'){
+				if(typ == 'from'){
+					opt = senderOption;
+					selectedAddresses = '';
+				} else if(typ == 'to'){
+					opt = recipientOption;
+					selectedAddresses = replaceAll(toRecipientSelectedAddresses, '&', '%26');
+				} else if(typ == 'cc'){
+					opt = ccbccOption;
+					selectedAddresses = replaceAll(ccRecipientSelectedAddresses, '&', '%26');
+				} else if(typ == 'bcc'){
+					opt = ccbccOption;
+					selectedAddresses = replaceAll(bccRecipientSelectedAddresses, '&', '%26');
+				}
+				var url = '/apex/CustomLookup?typ=' + typ + '&option=' + opt + '&selectedAddresses=' + selectedAddresses;
+			} else {
+				opt = singleTableOption;
+				selectedAddresses = '';
+				var toAddr = replaceAll(toRecipientSelectedAddresses, '&', '%26')
+				var ccAddr = replaceAll(ccRecipientSelectedAddresses, '&', '%26')
+				var bccAddr = replaceAll(bccRecipientSelectedAddresses, '&', '%26')
+				var url = '/apex/CustomLookup?typ=' + typ + '&option=' + opt + '&toAddr=' + toAddr + '&ccAddr=' + ccAddr + '&bccAddr=' + bccAddr;
+			}
+			
+		    
+		    var left = (screen.width/2)-(w/2);  
+		    var top = (screen.height/2)-(h/2);  
+		    popUpLookUp = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);  
+		       return popUpLookUp;  
+		} 
+
+		function setSenderEmail(name, email, flag, typ){
+			if(flag == 'yes'){
+				popUpLookUp.close();
+				if(jq_ee('.{!$User.Id}').is(':checked')){
+					jq_ee('.{!$User.Id}').prop('checked', false); 
+				}
+			}
+			jq_ee('.' + typ + 'Container').html(name + ' &lt;' + email + '&gt;');
+			senderSelectedAddresses = email;
+ 		}
+
+ 		function setAllRecipients(toRecipientObj, ccRecipientObj, bccRecipientObj){
+ 			popUpLookUp.close();
+ 			singleTable = true;
+
+ 			if(!isEmpty(toRecipientObj)){
+ 				jq_ee('.toDiv').css('display', 'block');
+ 				setRecipientEmail(toRecipientObj, 'to', 'no');
+ 			}
+ 			if(!isEmpty(ccRecipientObj)){
+ 				jq_ee('.ccDiv').css('display', 'block');
+ 				setRecipientEmail(ccRecipientObj, 'cc', 'no');
+ 			}
+ 			if(!isEmpty(bccRecipientObj)){
+ 				jq_ee('.bccDiv').css('display', 'block');
+ 				setRecipientEmail(bccRecipientObj, 'bcc', 'no');
+ 			}
+ 		}
+
+ 		function setSelectedFields(selectedFields){
+ 			popUpLookUp.close();
+ 			if(selectedFields.length > 0){
+ 				for(i = 0; i < selectedFields.length; i++){
+ 					console.log('@@@@ calling setSelectedFields : ' + selectedFields[i].field);
+ 					searchFields += selectedFields[i].field + ','
+ 				}
+ 				
+ 				searchFields = searchFields.substring(0, searchFields.length-1)
+ 				jq_ee('.fieldsToSearch').html(searchFields);
+ 				console.log('@@@@ calling setSelectedFields - searchFields : ' + searchFields);
+ 			}
+ 		}
+
+ 		function setSelectedFiles(attDocObj, typ, selectedFileStr, selectedFolder, flag){
+ 			if(flag){
+ 				popUpLookUp.close();
+ 			}
+ 			
+ 			console.log('setSelectedFiles - selectedFolder : ' + selectedFolder);
+ 			if(selectedFolder !== undefined && selectedFolder.length > 0){
+ 				folderId = selectedFolder;
+ 			}
+ 			//console.log('setSelectedFiles - typ : ' + typ);
+ 			console.log('setSelectedFiles - selectedFileStr : ' + selectedFileStr);
+ 			//console.log('@@@@ setSelectedAttDoc - selectedDocs : ' + selectedDocs);
+ 			//if(!isEmpty(attDocObj) || selectedFileStr.length != 0){
+ 				jq_ee('.' + typ + 'Container').css('display', 'block');
+ 				jq_ee('.' + typ + 'Size').css('display', 'block');
+ 				setSelectedAttDoc(attDocObj, typ, selectedFileStr);
+ 			//}
+ 		}
+
+ 		function setRecipientEmail(recipientObj, typ, flag){
+ 			if(!isEmpty(recipientObj)){
+ 				var recipientArray = determineCorrectObj(typ);
+ 				var recipients = '';
+	 			var recipientString = '';
+	 			var htmlContent = '';
+				arguments = [];
+	 			if(recipientArray.length > 0){
+	 				for(i = 0; i < recipientArray.length; i++){
+						arguments[0] = recipientArray[i].email;
+						arguments[1] = recipientArray[i].typ;
+						arguments[2] = recipientArray[i].pos;
+						htmlContent += buildEmailHtml(arguments);
+						addObjEntries(arguments);
+						recipientString += recipientArray[i].email + ',';
+					}	
+	 			}
+	 			arguments = [];
+	 			for(var prop in recipientObj){
+	 				arguments[0] = prop;
+					arguments[1] = typ;
+					arguments[2] = 'none';
+	 				htmlContent += buildEmailHtml(arguments);
+	 				recipientString += prop + ',';
+	 				addObjEntries(arguments);
+				}
+				
+				recipientString = recipientString.substring(0, recipientString.length-1);
+	 			if(flag == 'yes'){
+					popUpLookUp.close();
+				}
+				console.log('Recipient String for - ' + typ + ' : ' + recipientString);
+				jq_ee('.' + typ + 'Container').html(htmlContent);
+				setCorrectEmailString(typ, recipientString);
+	 		}
+ 		}
+
+ 		function setSelectedAttDoc(attDocObj, typ, selectedFileStr){
+ 			/*console.log('setSelectedAttDoc - typ: ' + typ);
+ 			console.log('setSelectedAttDoc - selectedFileStr : ' + selectedFileStr);*/
+ 			//console.log('setSelectedAttDoc: ' + typ);
+ 			//var newFiles = [];
+ 			/*var oldString = getCorrectEmailString(typ);
+ 			console.log('@@@@ setSelectedAttDoc - selectedDocs : ' + oldString);*/
+ 			//var attDocArray = determineCorrectObj(typ);
+ 			//console.log('setSelectedAttDoc - attDocArray.length : ' + attDocArray.length);
+ 			var attDocs = '';
+ 			var attDocString = '';
+ 			var htmlContent = '';
+ 			var fileSize = 0;
+ 			var attDocArr = [];
+ 			if(!isEmpty(attDocObj)){
+ 			//if(attDocArray.length > 0 && (selectedFileStr !== 'undefined' && selectedFileStr.length > 0)){
+ 				//console.log('@@@@ setSelectedAttDoc - selectedDocs : ' + oldString);
+ 				//if(oldString.length > 0 && oldString != '' && oldString != 'undefined'){
+ 					/*newFiles = oldString.split(',');
+	 				for(var popo in newFiles){
+	 					console.log('@@@@ setSelectedAttDoc - popo : ' + newFiles[popo]);
+	 				}*/
+ 				//}
+ 				/*var newFiles = selectedFileStr.split(',');
+ 				for(var popo in newFiles){
+ 					console.log('@@@@ setSelectedAttDoc - popo : ' + newFiles[popo]);
+ 				}*/
+ 				var attDocArray = determineCorrectObj(typ);
+ 				/*var attDocs = '';
+	 			var attDocString = '';
+	 			var htmlContent = '';
+	 			var fileSize = 0;*/
+
+				arguments = [];
+				console.log('setSelectedAttDoc - attDocArray.length : ' + attDocArray.length);
+	 			if(attDocArray.length > 0){
+	 				var newFiles = selectedFileStr.split(',');
+	 				for(i = 0; i < attDocArray.length; i++){
+	 					if(jq_ee.inArray(attDocArray[i].id, newFiles) !== -1){
+	 						attDocArr.push(attDocArray[i].id);
+							arguments[0] = attDocArray[i].id;
+							arguments[1] = attDocArray[i].typ;
+							arguments[2] = attDocArray[i].name;
+							arguments[3] = attDocArray[i].size;
+							htmlContent += buildAttDocHtml(arguments);
+							//attDocString += attDocArray[i].id + ',';
+							addObjEntries(arguments);
+							fileSize += parseInt(attDocArray[i].size);
+						}
+					}	
+	 			}
+	 		//}
+	 			//if(!isEmpty(attDocObj)){
+		 			arguments = [];
+		 			var controlFlag = '';
+		 			for(var prop in attDocObj){
+		 				var splitArr = (prop).split('_');
+		 				console.log('setSelectedAttDoc - splitArr[0] : ' + splitArr[0]);
+		 				
+		 				console.log('setSelectedAttDoc - jq_ee.inArray(splitArr[0], attDocArr) : ' + jq_ee.inArray(splitArr[0], attDocArr));
+		 				if(jq_ee.inArray(splitArr[0], attDocArr) == -1){
+		 					
+			 				if(splitArr.length == 1){
+			 					//if(jq_ee.inArray(prop, attDocArr) == -1){
+			 						controlFlag = prop;
+					 				arguments[0] = prop;
+									arguments[1] = typ;
+									arguments[2] = attDocObj[prop];
+			 					//}
+			 					
+			 				} else if(splitArr.length == 2){
+			 					//if(jq_ee.inArray(prop, attDocArr) == -1){
+				 					if(controlFlag == splitArr[0]) {
+				 						//arguments[3] = splitArr[1]
+				 						console.log('setSelectedAttDoc - splitArr[1] : ' + splitArr[1]);
+				 						arguments[3] = bytesToSize(parseInt(splitArr[1]));
+				 						htmlContent += buildAttDocHtml(arguments);
+						 				//attDocString += splitArr[0] + ',';
+						 				attDocArr.push(splitArr[0]);
+						 				addObjEntries(arguments);
+						 				fileSize += parseInt(splitArr[1]);
+						 				controlFlag = '';
+				 					}
+				 				//}
+			 				}
+		 				}
+					//}
+				}
+				
+				/*attDocString = attDocString.substring(0, attDocString.length-1);
+
+				jq_ee('.' + typ + 'Container').html(htmlContent);
+				jq_ee('.' + typ + 'Size').html(buildFileSizeHtml(fileSize));
+				setCorrectEmailString(typ, attDocString);
+				console.log('@@@@ setSelectedAttDoc - attDocString end : ' + attDocString);*/
+	 		} else {
+	 			var attDocArray = determineCorrectObj(typ);
+	 			if(attDocArray.length > 0 && (selectedFileStr !== 'undefined' && selectedFileStr.length > 0)){
+	 				var newFiles = selectedFileStr.split(',');
+	 				for(var popo in newFiles){
+	 					console.log('@@@@ setSelectedAttDoc - popo : ' + newFiles[popo]);
+	 				}
+	 				for(i = 0; i < attDocArray.length; i++){
+	 					if(jq_ee.inArray(attDocArray[i].id, newFiles) !== -1){
+	 						console.log('@@@@ setSelectedAttDoc - attDocArray[i].id : ' + attDocArray[i].id);
+	 						console.log('@@@@ setSelectedAttDoc - attDocArray[i].id IN ARRAY : ' + jq_ee.inArray(attDocArray[i].id, newFiles));
+	 						arguments[0] = attDocArray[i].id;
+							arguments[1] = attDocArray[i].typ;
+							arguments[2] = attDocArray[i].name;
+							//arguments[3] = attDocArray[i].size;
+							arguments[3] = bytesToSize(attDocArray[i].size);
+							htmlContent += buildAttDocHtml(arguments);
+							attDocArr.push(attDocArray[i].id);
+							//attDocString += attDocArray[i].id + ',';
+							addObjEntries(arguments);
+							fileSize += parseInt(attDocArray[i].size);
+	 					}
+	 				}
+	 			}
+	 		}
+
+	 		//attDocString = attDocString.substring(0, attDocString.length-1);
+	 		attDocString = attDocArr.join();
+
+			jq_ee('.' + typ + 'Container').html(htmlContent);
+			jq_ee('.' + typ + 'Size').html(buildFileSizeHtml(fileSize));
+			setCorrectEmailString(typ, attDocString);
+			console.log('@@@@ setSelectedAttDoc - attDocString end : ' + attDocString);
+
+			if(typ == 'document'){
+				totalDocSizeInBytes = fileSize;
+			} else {
+				totalAttSizeInBytes = fileSize;
+			}
+
+			//jq_ee('.actualSize').html(bytesToSize(totalDocSizeInBytes + totalAttSizeInBytes));
+			totalFileSize = totalDocSizeInBytes + totalAttSizeInBytes + fileUpload;
+			buildTotalFileSizeHtml(totalFileSize);
+			//buildTotalFileSizeHtml(totalDocSizeInBytes + totalAttSizeInBytes);
+
+			if(attDocString.length < 1){
+				jq_ee('.' + typ + 'Container').css('display', 'none');
+				jq_ee('.' + typ + 'Size').css('display', 'none');
+			}
+ 		}
+
+ 		function processAttachmentJsonTest(){
+ 			var attachmentJson = {!attachmentJsonString};
+ 			console.log('@@@@ processAttachmentJson - attachmentJson : ' + attachmentJson);
+ 			for(var i = 0; i <attachmentJson.length; i++) { 
+ 				console.log('@@@@ processAttachmentJson : ' + attachmentJson[i].Name);
+ 				toggleFileAdd(attachmentJson[i].Id, attachmentJson[i].Name, attachmentJson[i].BodyLength);
+ 			}
+ 			setSelectedFiles(files, 'attachment', '', '', false);
+
+ 		}
+
+ 		function processAttachmentJson(attachmentJson){
+ 			console.log('@@@@ processAttachmentJson - attachmentJson : ' + attachmentJson);
+ 			
+	 		if(attachmentJson !== undefined){
+	 			console.log('@@@@ processAttachmentJson - files : ' + files);
+	 			for(var id in files){
+	 				var parts = id.split('_');
+	 				if(parts.length == 1){
+	 					removeAttDoc(id, 'attachment');
+	 				} else {
+	 					console.log('@@@@ processAttachmentJson - id : ' + files);
+	 				}
+	 			}
+	 			files = {};
+	 			for(var i = 0; i <attachmentJson.length; i++) { 
+	 				console.log('@@@@ processAttachmentJson : ' + attachmentJson[i].Name);
+	 				toggleFileAdd(attachmentJson[i].Id, attachmentJson[i].Name, attachmentJson[i].BodyLength);
+	 			}
+
+	 			console.log('@@@@ processAttachmentJson - files - end : ' + files);
+	 			setSelectedFiles(files, 'attachment', '', '', false);
+ 			}
+ 		}
+
+ 		function toggleFileAdd(Id, name, size){
+			//if (!files.hasOwnProperty(Id)){
+				files[Id] = name;
+				files[Id + '_' + size] = size;
+			//}
+	    }
+
+ 		function addObjEntries(args){
+ 			switch(args[1]){
+				case 'to':
+					toObj.push({email:args[0], typ:args[1], pos:args[2]});
+					break;
+				case 'cc':
+					ccObj.push({email:args[0], typ:args[1], pos:args[2]});
+					break;
+				case 'bcc':
+					bccObj.push({email:args[0], typ:args[1], pos:args[2]});
+					break;
+				case 'document':
+					docObj.push({id:args[0], typ:args[1], name:args[2], size:args[3]});
+					break;
+				case 'attachment':
+					attObj.push({id:args[0], typ:args[1], name:args[2], size:args[3]});
+					break;
+			}
+ 		}
+
+ 		function addAdditionalRecipient(position, typ){
+ 			var email = jq_ee('.email_' + position).val();
+ 			console.log('@@@@ email : ' + email);
+ 			console.log('@@@@ validate : ' + validateEmail(email));
+ 			console.log('@@@@ validate error : ' + jq_ee('.email_' + position + '_error').html());
+ 			if(validateEmail(email) === false){
+				//jq_ee('.email_' + position + 'error').css('display', 'block');
+				jq_ee('.email_' + position + '_error').show();
+				jq_ee('.' + typ + '_' + position).prop('checked', false);
+				return;
+		  	} else {
+		  		if(typ == 'to'){
+		  			jq_ee('.noToEmail').hide();
+		  		}
+		  		jq_ee('.email_' + position + '_error').hide();
+		  		var isCheckedTo = jq_ee('.' + typ + '_' + position).is(':checked');
+				jq_ee('.' + typ + 'Div').css('display', 'block');
+				toggleRecipientSelection(isCheckedTo, email, position, typ);
+		  	}
+
+ 			/*var email = jq_ee('.email_' + position).val();
+			var isCheckedTo = jq_ee('.' + typ + '_' + position).is(':checked');
+			jq_ee('.' + typ + 'Div').css('display', 'block');
+			toggleRecipientSelection(isCheckedTo, email, position, typ);*/
+		}
+
+		function toggleRecipientSelection(checked, email, position, typ){
+			if(checked){
+				addEmail(email, typ, position);
+			} else {
+				removeEmail(email, typ, position);
+			}
+		}
+
+ 		function getCorrectEmailString(typ){
+ 			switch(typ){
+				case 'to':
+					return toRecipientSelectedAddresses;
+				case 'cc':
+					return ccRecipientSelectedAddresses;
+				case 'bcc':
+					return bccRecipientSelectedAddresses;
+				case 'document':
+					return selectedDocs;
+				case 'attachment':
+					return selectedAtts;
+			}
+ 		}
+
+ 		function setCorrectEmailString(typ, recipientStr){
+ 			switch(typ){
+				case 'to':
+					toRecipientSelectedAddresses = recipientStr;
+					break;
+				case 'cc':
+					ccRecipientSelectedAddresses = recipientStr;
+					break;
+				case 'bcc':
+					bccRecipientSelectedAddresses = recipientStr;
+					break;
+				case 'document':
+					selectedDocs = recipientStr;
+					break;
+				case 'attachment':
+					selectedAtts = recipientStr;
+					break;
+			}
+ 		}
+
+ 		function addToCorrectEmailString(typ, strToAdd){
+ 			switch(typ){
+				case 'to':
+				console.log('addToCorrectEmailString : ' + toRecipientSelectedAddresses + ' -- strToAdd : ' + strToAdd);
+					if(toRecipientSelectedAddresses.length == 0){
+						toRecipientSelectedAddresses =  strToAdd;
+					} else {
+						toRecipientSelectedAddresses = toRecipientSelectedAddresses + ',' + strToAdd;
+					}
+					break;
+				case 'cc':
+					if(ccRecipientSelectedAddresses.length == 0){
+						ccRecipientSelectedAddresses =  strToAdd;
+					} else {
+						ccRecipientSelectedAddresses = ccRecipientSelectedAddresses + ',' + strToAdd;
+					}
+					break;
+				case 'bcc':
+					if(bccRecipientSelectedAddresses.length == 0){
+						bccRecipientSelectedAddresses =  strToAdd;
+					} else {
+						bccRecipientSelectedAddresses = bccRecipientSelectedAddresses + ',' + strToAdd;
+					}
+					break;
+				case 'document':
+					if(selectedDocs.length == 0){
+						selectedDocs =  strToAdd;
+					} else {
+						selectedDocs = selectedDocs + ',' + strToAdd;
+					}
+					break;
+				case 'attachment':
+					if(selectedAtts.length == 0){
+						selectedAtts =  strToAdd;
+					} else {
+						selectedAtts = selectedAtts + ',' + strToAdd;
+					}
+					break;
+			}
+ 		}
+
+
+ 		function setOption(typ, option){
+ 			switch(typ){
+ 				case 'from':
+ 					senderOption = option.value;
+ 					break;
+				case 'to':
+					recipientOption = option.value;
+					break;
+				case 'ccbcc':
+					ccbccOption = option.value;
+					break;
+				case 'singleTable':
+					singleTableOption = option.value;
+					break;
+			}
+ 		}
+
+ 		function determineCorrectObj(typ){
+ 			//console.log('@@@@ determineCorrectObj : ' + typ);
+ 			var recipientArray = [];
+ 			switch(typ){
+				case 'to':
+					recipientArray = toObj;
+					toObj = [];
+					break;
+				case 'cc':
+					recipientArray = ccObj;
+					ccObj = [];
+					break;
+				case 'bcc':
+					recipientArray = bccObj;
+					bccObj = [];
+					break;
+				case 'document':
+					//console.log('@@@@ determineCorrectObj : ' + typ);
+					recipientArray = docObj;
+					docObj = [];
+					break;
+				case 'attachment':
+					recipientArray = attObj;
+					attObj = [];
+					break;
+			}
+			/*for(var papa in recipientArray){
+	 			console.log('@@@@ determineCorrectObj : ' + papa);
+	 			console.log('@@@@ determineCorrectObj : ' + recipientArray[papa].name);
+	 		}*/
+			return recipientArray;
+ 		}
+
+ 		function addEmail(email, typ, position){
+ 			arguments = [];
+			arguments[0] = email;
+			arguments[1] = typ;
+			arguments[2] = position;
+			jq_ee('.' + typ + 'Container').append(buildEmailHtml(arguments));
+			addObjEntries(arguments);
+			addToCorrectEmailString(typ, email);
+ 		}
+
+ 		function removeEmail(email, typ, position){
+ 			var recipientString = '';
+ 			var recipientArray = determineCorrectObj(typ);
+ 			var htmlContent = '';
+ 			var existing = getCorrectEmailString(typ).split(',');
+ 			var mail = email;
+ 			arguments = [];
+ 			if(recipientArray.length > 0){
+ 				for(i = 0; i < recipientArray.length; i++){
+					if(recipientArray[i].email != mail){
+						arguments[0] = recipientArray[i].email;
+						arguments[1] = recipientArray[i].typ;
+						arguments[2] = recipientArray[i].pos;
+						htmlContent += buildEmailHtml(arguments);
+						addObjEntries(arguments);
+						recipientString += recipientArray[i].email + ',';
+					}
+				}	
+ 			}
+
+ 			recipientString = recipientString.substring(0, recipientString.length-1);
+			jq_ee('.' + typ + 'Container').html(htmlContent);
+			setCorrectEmailString(typ, recipientString);
+			if(recipientString.length < 1){
+				jq_ee('.' + typ + 'Div').css('display', 'none');
+			}
+			if(position != 'none') {
+				jq_ee('.' + typ + '_' + position).prop('checked', false);
+			}
+ 		}
+
+ 		function removeAttDoc(id, typ){
+ 			for(var papa in docObj){
+	 			console.log('@@@@ removeAttDoc : ' + papa);
+	 			console.log('@@@@ removeAttDoc : ' + docObj[papa].id);
+	 			console.log('@@@@ removeAttDoc : ' + docObj[papa].typ);
+	 			console.log('@@@@ removeAttDoc : ' + docObj[papa].name);
+	 			console.log('@@@@ removeAttDoc : ' + docObj[papa].size);
+	 		}
+ 			var attDocArray = determineCorrectObj(typ);
+ 			console.log('typ: ' + typ);
+ 			console.log('id: ' + id);
+ 			console.log('attDocArray.length: ' + attDocArray.length);
+ 			for(i = 0; i < attDocArray.length; i++){
+ 				console.log('attDocArray id: ' + attDocArray[i].id);
+ 			}
+ 			var attDocString = '';
+ 			var htmlContent = '';
+ 			//var existing = getCorrectEmailString(typ).split(',');
+ 			var attDocId = id;
+ 			var fileSize = 0;
+ 			arguments = [];
+ 			if(attDocArray.length > 0){
+ 				for(i = 0; i < attDocArray.length; i++){
+					if(attDocArray[i].id != attDocId){
+						arguments[0] = attDocArray[i].id;
+						arguments[1] = attDocArray[i].typ;
+						arguments[2] = attDocArray[i].name;
+						//arguments[3] = attDocArray[i].size;
+						arguments[3] = bytesToSize(attDocArray[i].size);
+						htmlContent += buildAttDocHtml(arguments);
+						attDocString += attDocArray[i].id + ',';
+						addObjEntries(arguments);
+						fileSize += parseInt(attDocArray[i].size);
+					}
+				}	
+ 			}
+
+ 			attDocString = attDocString.substring(0, attDocString.length-1);
+ 			console.log('@@@@ removeAttDoc - attDocString : ' + attDocString);
+
+			jq_ee('.' + typ + 'Container').html(htmlContent);
+			jq_ee('.' + typ + 'Size').html(buildFileSizeHtml(fileSize));
+
+
+			if(typ == 'document'){
+				totalDocSizeInBytes = fileSize;
+			} else {
+				totalAttSizeInBytes = fileSize;
+			}
+
+			//jq_ee('.actualSize').html(bytesToSize(totalDocSizeInBytes + totalAttSizeInBytes));
+			buildTotalFileSizeHtml(totalDocSizeInBytes + totalAttSizeInBytes);
+
+			setCorrectEmailString(typ, attDocString);
+
+			if(attDocString.length < 1){
+				jq_ee('.' + typ + 'Container').css('display', 'none');
+				jq_ee('.' + typ + 'Size').css('display', 'none');
+			}
+ 		}
+
+ 		// args contain email, typ and maybe position in this exact other
+ 		function buildEmailHtml(args){
+ 			var htmlContent = '<span class="vN">';
+ 			htmlContent += '<div class="vT">' + args[0] + '</div>';
+ 			htmlContent += '<div class="vM" onclick="removeEmail(\'' + args[0] + '\', \'' + args[1] + '\',  \'' + args[2] + '\');"></div>';
+ 			htmlContent += '</span>';
+ 			return htmlContent;
+ 		}
+
+ 		// args contain email, typ and maybe position in this exact other
+ 		//<div class="tooltip-me example-item" data-title="I am the basic tooltip content"></div>
+ 		function buildAttDocHtml(args){
+ 			var htmlContent = '<span class="vN">';
+ 			htmlContent += '<div class="vT" title="' + args[3] + '">' + args[2] + '</div>';
+ 			/*htmlContent += '<div class="vT " data-tooltip="' + args[3] + '">' + args[2] + '</div>';*/
+ 			htmlContent += '<div class="vM" onclick="removeAttDoc(\'' + args[0] + '\', \'' + args[1] + '\');"></div>';
+ 			htmlContent += '</span>';
+ 			return htmlContent;
+ 		}
+
+ 		// args contain email, typ and maybe position in this exact other
+ 		function buildFileSizeHtml(filesize){
+ 			var htmlContent = '<span style="font-weight:bold;">Total file size: </span>';
+ 			htmlContent += '<span>' + bytesToSize(filesize) + '</span>';
+ 			//htmlContent += '<span> KB</span>';
+ 			return htmlContent;
+ 		}
+
+ 		// args contain email, typ and maybe position in this exact other
+ 		function buildTotalFileSizeHtml(filesize){
+ 			var size = bytesToSize(filesize);
+ 			var className = attachmentSizePolice(size);
+ 			console.log('buildTotalFileSizeHtml - size : ' + size);
+ 			console.log('buildTotalFileSizeHtml - className : ' + className);
+ 			jq_ee('.actualSize').html(size);
+ 			jq_ee('.actualSize').removeClass('size_green');
+ 			jq_ee('.actualSize').removeClass('size_yellow');
+ 			jq_ee('.actualSize').removeClass('size_red');
+ 			if(size != 0){
+ 				jq_ee('.actualSize').addClass(className);
+ 			}
+ 			
+ 			//var htmlContent = '<span style="font-weight:bold;">Total file size: </span>';
+ 			//htmlContent += '<span>' + size + '</span>';
+ 			//htmlContent += '<span> KB</span>';
+ 		}
+
+ 		function escapeRegExp(string) {
+		    return string.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+		}
+
+		function replaceAll(string, find, replace) {
+		  return string.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+		}
+
+		function isEmpty(obj) {
+		    if (obj == null) return true;
+		    if (Object.keys(obj).length > 0)    return false;
+		    if (Object.keys(obj).length === 0)  return true;
+		    
+		    return false;
+		}
+
+		function lookUpRecord(title, w, h, typ){
+			//searchFields = '';
+			var parentId = '';
+			var selectedFiles = '';
+			var url  = '';
+			var searchString  = '';
+			/*if(typ == 'fields'){
+				searchFields = '';
+			}*/
+
+			if(typ == 'attachment'){
+				//selectedRecordId = jq_ee('.relatedToLink').text();
+				console.log('@@@@ lookUpRecord - selectedRecordId : ' + whatId);
+				if(whatId === 'undefined' || whatId.length == 0){
+					jq_ee('.attachmentWarning').show();
+					return;
+				} else{
+					parentId = whatId;
+					selectedFiles = selectedAtts;
+					url = '/apex/RecordLookup?typ=' + typ + '&parentId=' + parentId + '&selectedFiles=' + selectedFiles;
+				}
+			} else if(typ == 'document'){
+				selectedFiles = selectedDocs;
+				url = '/apex/RecordLookup?typ=' + typ + '&selectedFiles=' + selectedFiles + '&folderId=' + folderId;
+			} else if(typ == 'search'){
+				if(searchFields.length == 0){
+					bootbox.alert('please select search fields first!');
+					return;
+				} else {
+					searchString = jq_ee('.searchString').val();
+					var url = '/apex/RecordLookup?typ=' + typ + '&objName=' + objName + '&searchString=' + searchString + '&searchFields=' + searchFields;
+				}
+			} else if(typ == 'fields'){
+				searchString = jq_ee('.searchString').val();
+				var url = '/apex/RecordLookup?typ=' + typ + '&objName=' + objName + '&searchString=' + searchString;
+			} else if(typ == 'recipientType'){
+				var recipientType = jq_ee('.recipientType').val();
+				console.log('lookUpRecord - type : ' + recipientType);
+				var url = '/apex/RecordLookup?typ=' + typ + '&recipientType=' + recipientType;
+			}
+			/*if(typ == 'search'){
+				if(searchFields.length == 0){
+					alert('please select search fields first!');
+					return;
+				}
+			}*/
+			
+			/*var url = '/apex/RecordLookup?typ=' + typ + '&objName=' + objName + '&searchString=' + searchString + '&searchFields=' + searchFields + '&parentId=' + parentId;*/
+			var left = (screen.width/2)-(w/2);  
+		    var top = (screen.height/2)-(h/2);  
+		    popUpLookUp = window.open(url, title, 'toolbar=no, location=no, directories=no, status=no, menubar=no, scrollbars=no, resizable=no, copyhistory=no, width='+w+', height='+h+', top='+top+', left='+left);  
+		    return popUpLookUp; 
+		}
+
+		function lookUpSelectedUser(recordId, recordName, fieldLabel){
+			popUpLookUp.close();
+			whatId = recordId;
+			jq_ee('td.relatedToSection').parent().show();
+			/*jq_ee('.relatedToLabel').css('display', 'block');
+			jq_ee('.relatedToLabel').css('display', 'block');
+			jq_ee('.relatedToLink').css('display', 'block');*/
+			jq_ee('.relatedToLink').text(recordId);
+			jq_ee('.relatedToLink').attr('href', '/' + recordId);
+
+			/*jq_ee('.relatedToMiscLabel').css('display', 'block');
+			jq_ee('.relatedToMiscText').css('display', 'block');*/
+			jq_ee('.relatedToMiscLabel').html(fieldLabel + ':');
+			jq_ee('.relatedToMiscText').html(recordName);
+			jq_ee('.relatedToWarning').hide();
+			if({!emailEditorConfig[0].Automatically_Attach_Documents__c}){
+				/*jq_ee('.attachmentContainer').css('display', 'block');
+ 				jq_ee('.attachmentSize').css('display', 'block');*/
+ 				buildAttachmentListJson(recordId);
+			}
+			//CKEDITOR.replace( 'contentContainer');
+			//var selectedTemplate = {!selectedEmailTemplateId};
+			/*if(selectedTemplate){
+				console.log('EMAIL template : ' + selectedTemplate);
+			}*/
+			if(selectedEmailTemplateId.length == 0){
+				jq_ee('.templateSelectionWarning').show();
+			} else {
+				jq_ee('.templateSelectionWarning').hide();
+				determineTemplateBody();
+			}
+		}
+
+		function setSelectedRecipient(recordId, recordName){
+			popUpLookUp.close();
+			jq_ee('.selectedRecipientLink').text(recordName);
+			jq_ee('.selectedRecipientLink').attr('href', '/' + recordId);
+			setRecipientAndRefreshTemplateBody(recordId);
+			//setRecipientAndRefreshTemplateBody();
+		}
+
+		function closeLookUp(){
+			popUpLookUp.close();
+		}
+
+		function disableRecordLookup(){
+        	//console.log('objName.length : ' + objName.length);
+        	//if(objName undefined && objName.length <= 0){
+        	if(objName){
+        		jq_ee('.searchFields').css('display', 'block');
+        	} else {
+        		jq_ee('.searchFields').css('display', 'none');
+        	}
+		}
+
+		function setObjectName(){
+			objName = jq_ee('.selectedObject').val();
+			searchFields = '';
+			jq_ee('.fieldsToSearch').html('');
+			disableRecordLookup();
+		}
+
+		function performSearchOnKeyPress(evt){
+	        var code = (evt.keyCode ? evt.keyCode : evt.which);
+	        if(code == 13){
+	        	lookUpRecord('Record lookup', 600, 500, 'search');
+	        }
+	        
+	        if (code == 13) {
+		       if (evt.preventDefault) {
+		           evt.preventDefault();
+		       } else {
+		           evt.returnValue = false;
+		       }
+		   }
+	    }
+
+	    function determineTemplateBody(){
+	    	console.log('@@@@ determineTemplateBody: ');
+	    	var selectedRecordId = jq_ee('.relatedToLink').text();
+	    	getTemplateBody(selectedRecordId);
+	    	//clearDefaultContent();
+	    	//return false;
+	    }
+
+	    function clearDefaultContent(){
+	    	//var selectedRecordId = jq_ee('.relatedToLink').text();
+	    	//if(selectedRecordId){
+	    		console.log('@@@@  clearDefaultContent : ' + jq_ee('#defaultContent').html());
+	    		jq_ee('#defaultContent').html('');
+	    	//}
+	    }
+
+	    /*function isTemplateIdSet(whatId, templateId){
+	    	console.log('@@@@ isTemplateIdSet - whatId : ' + whatId);
+	    	console.log('@@@@ isTemplateIdSet - templateId : ' + templateId);
+	    	if(whatId && templateId){
+	    		isRelatedToSet(whatId);
+	    	} else {
+	    		scrollToTop();
+	    	}
+	    }*/
+
+	    function isTemplateIdSet(relatedToId, templateId, recipientId){
+	    	console.log('@@@@ isTemplateIdSet - relatedToId : ' + relatedToId);
+	    	console.log('@@@@ isTemplateIdSet - templateId : ' + templateId);
+	    	CKEDITOR.replace('contentContainer');
+	    	/*selectedEmailTemplateId = '{!selectedEmailTemplateId}';
+	    	selectedRecipientId = '{!selectedRecipientId}';*/
+	    	selectedRecipientId = recipientId;
+	    	if(!relatedToId || !templateId){
+	    		scrollToTop();
+	    	}
+
+	    	if(templateId && !recipientId && templateId != 'none'){
+	    		jq_ee('.recipientWarning').show();
+	    	} else {
+	    		jq_ee('.recipientWarning').hide();
+	    	}
+	    }
+				
+	    function isRelatedToSet(relatedToId, templateId, recipientId){
+	    	console.log('@@@@ isRelatedToSet - relatedToId : ' + relatedToId);
+	    	console.log('@@@@ isRelatedToSet - templateId : ' + templateId);
+	    	console.log('@@@@ isRelatedToSet - recipientId : ' + recipientId);
+	    	CKEDITOR.replace('contentContainer');
+	    	/*selectedEmailTemplateId = '{!selectedEmailTemplateId}';
+	    	selectedRecipientId = '{!selectedRecipientId}';*/
+	    	selectedEmailTemplateId = templateId;
+	    	/*if(!relatedToId){
+	    		scrollToTop();
+	    	}*/
+	    	whatId = relatedToId;
+	    	if(templateId && !relatedToId && templateId != 'none'){
+	    		jq_ee('.relatedToWarning').show();
+	    	} else {
+	    		jq_ee('.relatedToWarning').hide();
+	    		jq_ee('.templateSelectionWarning').hide();
+	    	}
+	    	if(templateId && !recipientId && templateId != 'none'){
+	    		jq_ee('.recipientWarning').show();
+	    	} else {
+	    		jq_ee('.recipientWarning').hide();
+	    	}
+	    }
+
+	    function bytesToSize(bytes) {
+		    var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+		    //if (bytes == 0) return 'n/a';
+		    if (bytes == 0) return '0';
+		    var i = parseInt(Math.floor(Math.log(bytes) / Math.log(1024)));
+		    if (i == 0) return bytes + ' ' + sizes[i]; 
+		    return (bytes / Math.pow(1024, i)).toFixed(1) + ' ' + sizes[i];
+		};
+
+		function attachmentSizePolice(filesize){
+			var parts = filesize.split(' ');
+			console.log('attachmentSizePolice 0 : ' + parts[0]);
+			console.log('attachmentSizePolice 1 : ' + parts[1]);
+			if(parts[1] == 'GB' || parts[1] == 'TB'){
+				return 'size_red';
+			} else if(parts[1] == 'MB' && (parts[0] > 5 &&  parts[0] < 9)){
+				return 'size_yellow';
+			} else if(parts[1] == 'MB' && parts[0] > 9){
+				return 'size_red';
+			} else {
+				return 'size_green';
+			}
+		}
+
+		function showMoreFileInputFields(){
+			/*jq_ee('.file_' + attachmentNo).css('display', 'block');*/
+			jq_ee('.file_' + attachmentNo).css('visibility', 'visible');
+			attachmentNo++;
+		}
+
+		/*function showFileSize(className){
+			console.log('showFileSize - className: ' + className);
+			var input, file;
+		    if (!window.FileReader) {
+		        console.log("The file API isn't supported on this browser yet.");
+		        return;
+		    }
+		    input = jq_ee('.' + className);
+		    console.log('SIZE: ' + input.files[0].size);
+
+		}*/
+
+		function determineFileSize(ele, position){
+			var fs = ele.files[0].size;
+			if(uploadedFiles.hasOwnProperty(position)){
+				fileUpload -= uploadedFiles[position];
+			} 
+			uploadedFiles[position] = fs;
+			fileUpload +=  fs;
+			totalFileSize = totalDocSizeInBytes + totalAttSizeInBytes + fileUpload;
+			buildTotalFileSizeHtml(totalFileSize);
+			
+		}
+
+		function uploadImg(){
+			var fileDiv = document.getElementById("upload-image");
+			console.log('SIZE: ' + fileDiv.files[0].size);
+		}
+
+		function requireCssFile(filename){
+			var fileref = document.createElement('link');
+			fileref.setAttribute('rel', 'stylesheet');
+			fileref.setAttribute('type', 'text/css');
+			fileref.setAttribute('href', filename);
+			document.getElementsByTagName('head')[0].appendChild(fileref);
+		} 
+
+		function scrollToTop(){
+			document.body.scrollTop = document.documentElement.scrollTop = 0;
+		}
+	</script>
+	<style type="text/css">
+		.search {
+			background-repeat: no-repeat;
+		  	background-position: 20px 0;
+		}
+		.dataTableCss {
+			width: 15%;
+		}
+
+		.vN {
+			background-color: #f5f5f5;
+			border: 1px solid #d9d9d9;
+			cursor: default;
+			display: block;
+			height: 20px;
+			white-space: nowrap;
+			-webkit-border-radius: 3px;
+			border-radius: 3px;
+			float:left;
+			margin: 2px;
+		}
+
+		.vT {
+			display: inline-block;
+			color: #222;
+			margin: 2px 5px;
+			max-width: 325px;
+			max-height: 17px;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			direction: ltr;
+			cursor: move;
+			/*position: absolute;*/
+		}
+
+		.vM {
+			display: inline-block;
+			width: 14px;
+			height: 20px;
+			background: no-repeat url(//ssl.gstatic.com/apps/gadgets/contactarea/contactarea_sprite_2.gif) -4px 0;
+			opacity: .6;
+			vertical-align: top;
+			cursor: pointer;
+		}
+
+		.size_green{
+			color: green;
+		}
+
+		.size_yellow{
+			color: orange;
+		}
+
+		.size_red{
+			color: red;
+		}
+
+		.hideAttachment {
+			/*display: none;*/
+			visibility: hidden;
+		}
+
+		.errorMessage {
+			color: red;
+		}
+
+		.warningMessage {
+			color: orange;
+		}
+	</style>
+	<apex:Form id="customLookupForm">
+		<!-- <apex:actionFunction name="senderEmail" action="{!setSenderEmail}" reRender="customLookupForm" status="LoadingStatusWheel">
+			<apex:param name="senderMail" assignTo="{!sender}" value="" />
+		</apex:actionFunction> -->
+		<apex:actionRegion >
+
+		<apex:actionFunction name="sendEmail" action="{!sendEmail}" status="LoadingStatusWheel">
+			<!--<apex:param name="toBinding" assignTo="{!toBinding}" value="" />-->
+		</apex:actionFunction>
+
+		<apex:actionFunction name="getTemplateBody" action="{!getTemplateBody}" oncomplete="isTemplateIdSet('{!whatId}', '{!selectedEmailTemplateId}', '{!selectedRecipientId}');" status="LoadingStatusWheel" reRender="emailContent, messages">
+			<apex:param name="whatId" value="" assignTo="{!whatId}" />
+		</apex:actionFunction>
+		<apex:actionFunction name="setRecipientAndRefreshTemplateBody" action="{!setRecipientAndRefreshTemplateBody}" oncomplete="isTemplateIdSet('{!whatId}', '{!selectedEmailTemplateId}', '{!selectedRecipientId}');" status="LoadingStatusWheel" reRender="emailContent, messages">
+			<apex:param name="selectedRecipientId" value="" assignTo="{!selectedRecipientId}" />
+		</apex:actionFunction>
+		<!-- <apex:actionFunction name="getTemplateBody" action="{!getTemplateBody}" status="LoadingStatusWheel" reRender="{!IF(AND(whatId != null, selectedEmailTemplateId != null), 'emailContent, messages', 'messages')}" oncomplete="isTemplateIdSet('{!whatId}', '{!selectedEmailTemplateId}');">
+			<apex:param name="whatId" value="" assignTo="{!whatId}" />
+		</apex:actionFunction>
+		<apex:actionFunction name="setRecipientAndRefreshTemplateBody" action="{!setRecipientAndRefreshTemplateBody}" status="LoadingStatusWheel"  reRender="{!IF(AND(whatId != null, selectedEmailTemplateId != null), 'emailContent, messages', 'messages')}" oncomplete="isTemplateIdSet('{!whatId}', '{!selectedEmailTemplateId}');">
+			<apex:param name="selectedRecipientId" value="" assignTo="{!selectedRecipientId}" />
+		</apex:actionFunction> -->
+		<!-- <apex:actionFunction name="setRecipientAndRefreshTemplateBody" action="{!setRecipientAndRefreshTemplateBody}" status="LoadingStatusWheel" reRender="{!IF(whatId != null, 'emailContent, messages', 'messages')}" oncomplete="isRelatedToSet({!whatId});">
+		</apex:actionFunction> -->
+		<!-- <apex:actionFunction name="manageRecipientList" action="{!manageRecipientList}" status="LoadingStatusWheel" reRender="moreRecipients">
+			<apex:param name="selectedNumberToAdd" value="" assignTo="{!selectedNumberToAdd}" />
+		</apex:actionFunction> -->
+		<!-- <apex:actionFunction name="refreshTemplateDropdown" action="{!dummyCall}" status="LoadingStatusWheel" reRender="templateOptions" /> -->
+		<apex:actionFunction name="refreshTemplateDropdown" action="{!dummyCall}" status="LoadingStatusWheel" reRender="templateOptions">
+			<apex:param name="selectedFolder" value="" assignTo="{!selectedFolder}" />
+		</apex:actionFunction>
+		<apex:actionFunction name="buildAttachmentListJson" action="{!buildAttachmentListJson}" status="LoadingStatusWheel" reRender="attachmentSection" oncomplete="processAttachmentJson({!attachmentJsonString});">
+			<apex:param name="whatId" value="" assignTo="{!whatId}" />
+		</apex:actionFunction>
+		</apex:actionRegion>
+		<apex:sectionHeader title="Email Editor" subtitle="{!IF(relatedRecord != null, relatedRecord['name'], 'Send an Email')}" />
+		<apex:pageMessages id="messages" escape="false"/>
+		<!-- <div class="emailEditor"> -->
+		<apex:pageBlock rendered="{!showEmailEditor}" mode="maindetail">
+			<apex:pageBlockButtons >
+			
+				
+				<!-- <apex:commandButton action="{!sendEmail}" value="Send Email" status="LoadingStatusWheel" /> -->
+				<apex:commandButton onclick="emailService(); return false;" value="Send Email" status="LoadingStatusWheel" />
+				<apex:commandButton action="{'cancel'}" value="Cancel" status="LoadingStatusWheel" />
+			</apex:pageBlockButtons>
+			
+			<!-- <apex:pageBlockSection title="Recipients & Content" collapsible="false" columns="2" id="recipientsBlock"> -->
+			<apex:pageBlockSection title="Sender" collapsible="true" columns="2" id="senderBlock">
+			
+				<apex:pageBlockSectionItem rendered="{!AND(sender == null, senderDropdown != null)}" labelStyle="width:15%;" dataStyle="width:15%;">
+					<apex:outputLabel value="From" />
+					<apex:selectList value="{!sender}" multiselect="false" size="1">
+						<apex:selectOptions value="{!senderDropdown}" />
+					</apex:selectList>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!sender != null}" labelStyle="width:15%;" dataStyle="width:15%;">
+					<apex:outputLabel value="From" />
+					<div class="fromContainer">{!sender}</div>
+					<!-- <apex:outputText value="{!sender}" id="fromContainer"/> -->
+
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!sender == 'No Org Wide Email found!'}" labelStyle="text-align:left">
+					<apex:outputLabel value="Other Options: " />
+					<apex:panelGrid columns="4" rules="rows">
+			            <apex:outputLabel value="Use running user email?" />
+			            <apex:inputCheckbox styleClass="{!$User.Id}" value="{!useRunningUserEmail}" onchange="setSenderEmail('{!$User.FirstName} {!$User.LastName}', '{!$User.Email}', 'no', 'from')" style="margin-right:30px;"/>
+			            <apex:outputLabel value="Choose sender: " />
+			            <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="popupwindow('Sender Email Address Lookup', 600, 500, 'from')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Email Address Lookup (New Window)" alt="Email Address Lookup (New Window)" />
+			        </apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!AND(sender != null, sender != 'No Org Wide Email found!', !showSenderLookup)}" labelStyle="width:10%;">
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem rendered="{!OR(showSenderLookup, AND(emailEditorConfig[0].Show_Options_On_Page__c, emailEditorConfig[0].FromEmail_Choose_At_Runtime__c))}">
+					<apex:panelGrid columns="2" rules="rows">
+						<apex:outputPanel rendered="{!showSenderLookup}">
+			            	<apex:outputLabel value="Choose sender: " />
+			                <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="popupwindow('Sender Email Address Lookup', 600, 500, 'from')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Email Address Lookup (New Window)" alt="Email Address Lookup (New Window)" />
+			            </apex:outputPanel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+						<apex:outputPanel rendered="{!AND(emailEditorConfig[0].Show_Options_On_Page__c, emailEditorConfig[0].FromEmail_Choose_At_Runtime__c)}" >
+							<apex:outputLabel value="Sender address options: " />
+				            <apex:selectRadio value="{!editorOptions.senderOption}" layout="lineDirection" onchange="setOption('from', this)">
+								<apex:selectOptions value="{!editorOptions.senderOptions}"/>
+							</apex:selectRadio>
+						</apex:outputPanel>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				</apex:pageBlockSection>
+				<apex:pageBlockSection title="Recipients" collapsible="true" columns="2" id="recipientsBlock">
+				<!-- <apex:pageBlockSectionItem labelStyle="width:15%;" dataStyle="width:15%"> -->
+				<apex:pageBlockSectionItem labelStyle="width:15%;"  rendered="{!emailEditorConfig[0].Use_Lookups_Only__c}">
+					<apex:outputLabel value="To " />
+					<div class="toContainer" />
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Use_Lookups_Only__c}">
+					<apex:panelGrid columns="2" rules="rows">
+						<apex:outputPanel rendered="{!emailEditorConfig[0].Use_Lookups_Only__c}">
+			            	<apex:outputLabel value="Choose recipients: " />
+			                <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="popupwindow('Recipient Email Address Lookup', 600, 500, 'to')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Recipient Email Address Lookup (New Window)" alt="Recipient Email Address Lookup (New Window)" />
+			            </apex:outputPanel>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					
+						<apex:outputPanel rendered="{!emailEditorConfig[0].Show_Options_On_Page__c}" >
+							<apex:outputLabel value="Recipient address options: " />
+				            <apex:selectRadio value="{!editorOptions.toEmailOption}" layout="lineDirection" onchange="setOption('to', this)">
+								<apex:selectOptions value="{!editorOptions.toEmailOptions}"/>
+							</apex:selectRadio>
+						</apex:outputPanel>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Use_Lookups_Only__c}">
+					<apex:outputLabel value="Other Recipients" />
+					<apex:panelGrid columns="2" rules="rows">
+							<apex:outputLink onclick="popupwindow('Recipient Email Address Lookup', 600, 500, 'cc'); return false;"  style="font-weight:bold;" >Cc:</apex:outputLink>
+							<div class="ccContainer" />
+							<apex:outputLink onclick="popupwindow('Recipient Email Address Lookup', 600, 500, 'bcc'); return false;" style="font-weight:bold;" >Bcc:</apex:outputLink>
+							<div class="bccContainer" />
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Use_Lookups_Only__c, emailEditorConfig[0].Show_Options_On_Page__c)}">
+					<apex:panelGrid columns="2" rules="rows">
+						<apex:outputPanel >
+							<apex:outputLabel value="Recipient address options: " />
+				            <apex:selectRadio value="{!editorOptions.toEmailOption}" layout="lineDirection" onchange="setOption('ccbcc', this)">
+								<apex:selectOptions value="{!editorOptions.toEmailOptions}"/>
+							</apex:selectRadio>
+						</apex:outputPanel>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Use_Single_Table_Only__c}">
+					<apex:outputLabel value="Add Recipients" />
+					<apex:panelGrid columns="1" >
+						<apex:outputLink onclick="popupwindow('Recipient Email Address Lookup', 600, 500, 'all'); return false;" >to, cc, bcc</apex:outputLink><br />
+						<apex:panelGroup layout="inline" styleClass="toDiv" style="display:none;">
+							<div style="font-weight:bold;">To: </div>
+							<div class="toContainer"></div>
+							<br />
+						</apex:panelGroup>
+						<apex:panelGroup layout="inline" styleClass="ccDiv" style="display:none;">
+							<div style="font-weight:bold;">Cc: </div>
+							<div class="ccContainer"></div>
+							<br />
+						</apex:panelGroup>
+						<apex:panelGroup layout="inline" styleClass="bccDiv" style="display:none;">
+							<div style="font-weight:bold;">Bcc: </div>
+							<div class="bccContainer"></div>
+							<br />
+						</apex:panelGroup>
+						<div class="noToEmail errorMessage" style="width:100%;display:none;">You must supply at least a recipient in the to field</div>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Use_Single_Table_Only__c, emailEditorConfig[0].Show_Options_On_Page__c)}">
+					<apex:panelGrid columns="2" rules="rows">
+						<apex:outputPanel >
+							<apex:outputLabel value="Recipient address options: " />
+				            <apex:selectRadio value="{!editorOptions.toEmailOption}" layout="lineDirection" onchange="setOption('singleTable', this)">
+								<apex:selectOptions value="{!editorOptions.toEmailOptions}"/>
+							</apex:selectRadio>
+						</apex:outputPanel>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!IF(emailEditorConfig[0].Show_Options_On_Page__c, false, true)}" />
+				<!-- </apex:pageBlockSection>
+
+				<apex:pageBlockSection columns="1"> -->
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Add_More_Recipents__c}" dataStyle="width:50%">
+					<apex:outputLabel value="Add more recipients" />
+					<apex:actionRegion >
+					<apex:panelGrid columns="1" rules="rows" style="width:100%;" id="moreRecipients">
+						<!-- <apex:actionRegion> -->
+							<apex:selectList value="{!selectedNumberToAdd}" size="1" >
+							<apex:actionSupport event="onchange" action="{!manageRecipientList}" reRender="moreRecipients, messageBlock" status="LoadingStatusWheel" />
+								<apex:selectOptions value="{!numberOfRecipients}" />
+							</apex:selectList>
+						<!-- </apex:actionRegion> -->
+						<apex:pageBlockTable value="{!additionalRecipientsList}" var="listItem" >
+							<apex:column headerValue="to">
+								<apex:inputCheckbox styleClass="to_{!listItem.position}" value="{!listItem.to}" onchange="addAdditionalRecipient('{!listItem.position}', 'to');" />
+							</apex:column>
+							<apex:column headerValue="cc">
+								<apex:inputCheckbox styleClass="cc_{!listItem.position}" value="{!listItem.cc}" onchange="addAdditionalRecipient('{!listItem.position}', 'cc');" />
+							</apex:column>
+							<apex:column headerValue="bcc">
+								<apex:inputCheckbox styleClass="bcc_{!listItem.position}" value="{!listItem.bcc}" onchange="addAdditionalRecipient('{!listItem.position}', 'bcc');" />
+							</apex:column>
+							<apex:column >
+								<apex:inputText styleClass="email_{!listItem.position}" value="{!listItem.email}" style="width:90%;"/>
+								<div class="email_{!listItem.position}_error errorMessage" style="width:90%;display:none;">Error: this is not a valid email address</div>
+							</apex:column>
+							<apex:column >
+								<!-- <apex:actionRegion> -->
+								<apex:commandButton value="Remove" action="{!removeRecipient}" style="width:50px;" rendered="{!additionalRecipientsList.size > 1}" reRender="moreRecipients" status="LoadingStatusWheel" >
+									<apex:param name="recipientToRemove" value="{!listItem.position}" assignTo="{!recipientToRemove}" />
+								</apex:commandButton>
+								<!-- </apex:actionRegion> -->
+							</apex:column>
+						</apex:pageBlockTable>
+						<!-- <apex:actionRegion> -->
+						<apex:commandButton value="Add" action="{!addRecipient}" style="width:50px;" reRender="moreRecipients" status="LoadingStatusWheel" />
+						<!-- </apex:actionRegion> -->
+					</apex:panelGrid>
+					</apex:actionRegion>
+				</apex:pageBlockSectionItem>
+				<!-- <apex:pageBlockSectionItem rendered="{!IF(emailEditorConfig[0].Add_More_Recipents__c, true, false)}" />
+				</apex:pageBlockSection> -->
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Add_More_Recipents__c}" />
+					<!-- <apex:outputLabel value="Wrong email addresses" styleClass="wrongEmails" style="display:none;" />
+					<apex:outputText value="" styleClass="wrongEmails" style="display:none;" /> -->
+				</apex:pageBlockSection>
+
+				<!-- <apex:pageBlockSection columns="2"> -->
+				<apex:pageBlockSection title="Related To & Recipient Type" collapsible="true" columns="2" id="relatedToBlock">
+				<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Related_To_Selection__c, whatId == null)}">
+					<apex:outputLabel value="Choose Object" />
+					<apex:selectList value="{!selectedObject}" multiselect="false"  size="1" onchange="setObjectName();" styleClass="selectedObject">
+						<apex:selectOptions value="{!objectNames}" />
+					</apex:selectList>
+					<!-- <apex:panelGrid columns="1">
+						<apex:selectList value="{!selectedObject}" multiselect="false"  size="1" onchange="setObjectName();" styleClass="selectedObject">
+							<apex:selectOptions value="{!objectNames}" />
+						</apex:selectList>
+						<apex:panelGroup layout="inline" >
+							<apex:outputText styleClass="relatedToIdLabel" value="Record Id: " style="display:none;"/>
+				            <apex:outputLink value="" StyleClass="relatedToIdLink" style="display:none;" target="_blank"/>
+				            <apex:outputText styleClass="relatedToMiscLabel" value="" style="display:none;"/>
+				            <apex:outputText value="" StyleClass="relatedToMiscText" style="display:none;" />
+			            </apex:panelGroup>
+					</apex:panelGrid> -->
+					<!-- <apex:selectList value="{!selectedObject}" multiselect="false"  size="1" onchange="getFields();" styleClass="selectedObject">
+						<apex:selectOptions value="{!objectNames}" />
+					</apex:selectList> -->
+				</apex:pageBlockSectionItem>
+					<!-- <apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Related_To_Selection__c, whatId == null, objectFields == null)}">
+						<apex:outputLabel value="Related To: " style="font-weight: bold; font-size: 91%; color: #4a4a56;" />
+						<apex:panelGrid columns="2" rules="rows" rendered="{!objectFields == null}">
+				            <apex:inputText value="{!searchString}" styleClass="searchString"/>
+				            <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Record lookup', 600, 500)" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Record Lookup (New Window)" alt="Record Lookup (New Window)" />
+				        </apex:panelGrid>
+					</apex:pageBlockSectionItem> -->
+					
+					<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Related_To_Selection__c, whatId == null)}" >
+						<apex:outputLabel value="Record Search: " styleClass="searchFields" style="font-weight: bold; color: #4a4a56; display:none;" />
+				        <apex:panelGrid columns="1" rules="rows" styleClass="searchFields" style="display:none;">
+				        	<apex:panelGroup layout="inline" >
+					        	<apex:outputText value="Fields to search: " />
+					        	<apex:outputText value="" StyleClass="fieldsToSearch" />
+					        	<apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Record lookup', 600, 500, 'fields')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Record Lookup (New Window)" alt="Record Lookup (New Window)" />
+				        	</apex:panelGroup>
+				        	<apex:panelGroup layout="inline">
+					        	<apex:outputText value="Search String: " />
+					            <apex:inputText value="{!searchString}" styleClass="searchString" onkeyPress="performSearchOnKeyPress(event);" />
+					            <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Record lookup', 600, 500, 'search')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Record Lookup (New Window)" alt="Record Lookup (New Window)" />
+					            <div class="relatedToWarning warningMessage" style="width:90%;display:none;">select a record to use with the template</div>
+					            <!--<apex:outputText styleClass="relatedToIdLabel" value="Record Id: " style="display:none;"/>
+					            <apex:outputLink value="" StyleClass="relatedToIdLink" style="display:none;" target="_blank"/>
+					            <apex:outputText styleClass="relatedToMiscLabel" value="" style="display:none;"/>
+					            <apex:outputText value="" StyleClass="relatedToMiscText" style="display:none;" /> -->
+				            </apex:panelGroup>
+				        </apex:panelGrid>
+					</apex:pageBlockSectionItem>
+				<!-- <apex:outputPanel styleClass="fieldToHide"> -->
+					<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Related_To_Selection__c, whatId == null)}" dataStyleClass="relatedToSection">
+						<!-- <apex:outputLabel value="Related To" styleClass="relatedToLabel" style="display:none;" />
+						<apex:outputLink value="{!whatId}" StyleClass="relatedToLink" style="display:none;" target="_blank"/> -->
+						<apex:outputLabel value="Related To" styleClass="relatedToLabel" />
+						<apex:outputLink value="{!whatId}" StyleClass="relatedToLink" target="_blank"/>
+						<!-- <apex:panelGrid columns="1">
+							<apex:panelGroup layout="inline" >
+								<apex:outputText styleClass="relatedToIdLabel" value="Record Id: " style="display:none;"/>
+					            <apex:outputLink value="" StyleClass="relatedToIdLink" style="display:none;" target="_blank"/>
+					        </apex:panelGroup>
+					        <apex:panelGroup layout="inline" >
+					            <apex:outputText styleClass="relatedToMiscLabel" value="" style="display:none;"/>
+					            <apex:outputText value="" StyleClass="relatedToMiscText" style="display:none;" />
+				            </apex:panelGroup>
+				        </apex:panelGrid> -->
+					</apex:pageBlockSectionItem>
+				<!-- </apex:outputPanel> -->
+					<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Related_To_Selection__c, whatId == null)}" dataStyleClass="relatedToSection">
+					<!-- <apex:outputLabel value="" styleClass="relatedToMiscLabel" style="display:none;" />
+					<apex:outputText value="" StyleClass="relatedToMiscText" style="display:none;" /> -->
+					<apex:outputLabel value="" styleClass="relatedToMiscLabel" />
+					<apex:outputText value="" StyleClass="relatedToMiscText" />
+					</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Related_To_Selection__c}">
+					<apex:outputLabel value="Recipient Type" />
+					<apex:panelGrid columns="2">
+						<apex:selectList value="{!recipientType}" multiselect="false" size="1" styleClass="recipientType">
+							<apex:selectOptions value="{!recipientTypes}" />
+						</apex:selectList>
+						<apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Recipient Type lookup', 600, 500, 'recipientType')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Recipient Type Lookup (New Window)" alt="Recipient Type Lookup (New Window)" />
+						<div class="recipientWarning warningMessage" style="width:90%;display:none;">When you select a template, you must also choose a recipient!</div>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Related_To_Selection__c}">
+					<apex:outputLabel value="Selected User"/>
+					<apex:outputLink value="{!selectedRecipientId}" StyleClass="selectedRecipientLink" target="_blank"/>
+				</apex:pageBlockSectionItem>
+
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Template_Use__c}">
+					<apex:outputLabel value="Choose template" />
+					<!-- <apex:selectList value="{!selectedEmailTemplateId}" multiselect="false" size="1" id="templateOptions" onchange="determineTemplateBody();"> -->
+					<apex:panelGrid >
+						<apex:actionRegion >
+							<apex:selectList value="{!selectedEmailTemplateId}" multiselect="false" size="1" id="templateOptions">
+					            <apex:selectOptions value="{!templateOptions}"/>
+					             <apex:actionSupport event="onchange" action="{!getTemplateBody}" oncomplete="isRelatedToSet('{!whatId}', '{!selectedEmailTemplateId}', '{!selectedRecipientId}');" status="LoadingStatusWheel" reRender="emailContent, messages">
+					           <!--  <apex:actionSupport event="onchange" action="{!getTemplateBody}" oncomplete="isRelatedToSet('{!whatId}');" status="LoadingStatusWheel" reRender="{!IF(whatId != null, 'emailContent, messages', 'messages')}"> -->
+					            	<!-- <apex:param name="whatId" value="" assignTo="{!whatId}" />
+	 -->
+					            </apex:actionSupport>
+					        </apex:selectList>
+				        </apex:actionRegion>
+				        <div class="templateSelectionWarning warningMessage" style="width:100%;display:none;">You can select a template to use for your email!</div>
+			        </apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!AND(emailEditorConfig[0].Allow_Template_Use__c, emailEditorConfig[0].Show_Folder_Selection__c)}">
+					<apex:outputLabel value="Choose Folder" /> 
+					<!-- <apex:selectList value="{!selectedFolder}" multiselect="false" size="1" onchange=" -->
+					<apex:actionRegion >
+						<apex:selectList value="{!selectedFolder}" multiselect="false" size="1" >
+				            <apex:selectOptions value="{!folders}"/>
+				            <apex:actionSupport event="onchange" action="{!dummyCall}" status="LoadingStatusWheel" reRender="templateOptions"/>
+				        </apex:selectList>
+			        </apex:actionRegion>
+				</apex:pageBlockSectionItem>
+				</apex:pageBlockSection>
+
+				<apex:pageBlockSection title="Content" collapsible="true" columns="1" id="contentBlock">
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Subject" />
+						<apex:inputText value="{!subject}" style="width:70%;"/>
+					</apex:pageBlockSectionItem>
+					<apex:pageBlockSectionItem >
+						<apex:outputLabel value="Content" />
+						<apex:panelGrid id="emailContent"  style="width:70%;">
+							<textarea name="contentContainer" id="contentContainer" rows="10" cols="140">
+							{!htmlValueOfSelectedEmailtemplate}
+							<!--<apex:outputText id="defaultContent" rendered="{!defaultContentLabel != null}"> {!$Label[defaultContentLabel]} </apex:outputText> -->
+							<!--<div id="defaultContent"> {!$Label[defaultContentLabel]} </div> -->
+				            </textarea>
+			            </apex:panelGrid>
+					</apex:pageBlockSectionItem>
+				
+				<!-- <apex:pageBlockSectionItem /> -->
+
+			</apex:pageBlockSection>
+			
+			<apex:pageBlockSection rendered="{!emailEditorConfig[0].Allow_Attachments__c}" columns="1" title="Email Attachments">
+				<apex:pageBlockSectionItem rendered="{!OR(emailEditorConfig[0].Allow_Attachments__c, emailEditorConfig[0].Allow_Attachment_Selection__c, !emailEditorConfig[0].Automatically_Attach_Documents__c)}">
+				<apex:outputLabel value="Attachment Size Considerations " />
+				<apex:panelGrid columns="3">
+					<apex:outputText value="Allowed Size: " style="font-weight: bold;" />
+					<apex:outputText value="10MB" style="padding-right: 50px;" />
+					<apex:panelGroup >
+						<apex:outputText value="Actual Size: " style="font-weight: bold;" />
+						<apex:outputText value="" styleClass="actualSize" />
+						<!-- <apex:outputText value="Please make sure that the actual size is less than the Allowed size of 10MB!" styleClass="documentSizeError errorMessage" style="width:100%;display:none;"/> -->
+						<div class="documentSizeError errorMessage" style="width:100%;display:none;"><strong>Error: </strong>The total size of attachments should be less than 10MB!</div>
+					</apex:panelGroup>
+				</apex:panelGrid>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Document_Selection__c}">
+					<apex:outputLabel value="Select documents " />
+					<!-- <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Document lookup', 600, 500, 'document')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Document Lookup (New Window)" alt="Document Lookup (New Window)" /> -->
+
+					<apex:panelGrid columns="1" >
+						<apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Document lookup', 600, 500, 'document')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Document Lookup (New Window)" alt="Document Lookup (New Window)" />
+						<div class="documentSize" style="display:none;"></div>
+						<div class="documentContainer" style="display:none;"></div>
+						<!-- <apex:panelGroup layout="inline" styleClass="documentDiv" style="display:none;">
+							<div>Selected attachments: </div>
+							<div class="documentContainer"></div>
+							<br />
+						</apex:panelGroup> -->
+					</apex:panelGrid>
+
+				</apex:pageBlockSectionItem>
+				<!-- <apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Document_Selection__c}">
+					<apex:outputLabel value="Selected documents: " id="docSelectionLabel"/>
+					<apex:panelGrid id="docSelectionContent">
+						
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem> -->
+
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Attachment_Selection__c}">
+					<apex:outputLabel value="Select attachments " />
+					<!-- <apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Attachment lookup', 600, 500, 'attachment')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Attachment Lookup (New Window)" alt="Attachment Lookup (New Window)" /> -->
+
+
+					<apex:panelGrid columns="1" id="attachmentSection">
+						<apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Attachment lookup', 600, 500, 'attachment')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Attachment Lookup (New Window)" alt="Attachment Lookup (New Window)" />
+						<div class="attachmentSize" style="display:none;"></div>
+						<div class="attachmentContainer" style="display:none;"></div>
+						<!-- <apex:panelGroup layout="inline" styleClass="attachmentDiv" style="display:none;">
+							<div>Selected documents: </div>
+							<div class="attachmentContainer"></div>
+							<br />
+						</apex:panelGroup> -->
+						  <div class="attachmentWarning warningMessage" style="width:100%;display:none;">You must select a related record to add attachments!</div>
+					</apex:panelGrid>
+
+				</apex:pageBlockSectionItem>
+				<!-- </apex:pageBlockSection> -->
+
+				<!-- <apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Attachment_Selection__c}">
+					<apex:outputLabel value="Selected attachments: " id="attSelectionLabel"/>
+					<apex:panelGrid id="attSelectionContent">
+						
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem> -->
+				
+				<!-- <apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Automatically_Attach_Documents__c}">
+					<apex:outputLabel value="Selected documents:" />
+					<apex:panelGrid id="selectedDocuments">
+						<apex:outputText value="Total size of documents exceeds the salesforce limit of 25MB for email attachments. Please use the lookup to select documents to attach" rendered="{!sizeOfDocuments > 25}"/>
+						<apex:image value="/s.gif" StyleClass="lookupIcon" style="cursor:pointer;" onclick="lookUpRecord('Document lookup', 600, 500, 'document')" onmouseout="this.className = 'lookupIcon';this.className = 'lookupIcon';" onmouseover="this.className = 'lookupIconOn';this.className = 'lookupIconOn';" title="Document Lookup (New Window)" alt="Record Lookup (New Window)" rendered="{!sizeOfDocuments > 25}" />
+						<apex:outputText value="The related record has no documents" rendered="{!AND(sizeOfDocuments == 0, whatId != null)}"/>
+						<apex:outputText value="There is no related record from where attachments can be fetched!" rendered="{!AND(sizeOfDocuments == 0, whatId == null)}"/>
+					</apex:panelGrid>
+				</apex:pageBlockSectionItem> -->
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Document_Upload__c}">
+					<apex:outputLabel value="Choose Documents to upload" />
+					<apex:panelGrid columns="2">
+						<!-- <apex:outputPanel id="additionalAttachments"> -->
+		                    <apex:repeat value="{!additionalAttachments}" var="attachment">
+		                   <!--  <apex:outputPanel id="additionalAttachments" styleclass="file_{!attachment.position} {!IF(attachment.position > 2, ' hideAttachment', '')}"> -->
+		                    <apex:outputPanel id="additionalAttachments" styleclass="file_{!attachment.position} {!IF(attachment.position > 2, ' hideAttachment', '')}">
+		                        <!-- <apex:inputFile value="{!attachment.record.body}" filename="{!attachment.record.name}" onchange="uploadImg1('inputfile_{!attachment.position}');" styleclass="inputfile_{!attachment.position}"/> -->
+
+		                        <apex:inputFile value="{!attachment.record.body}" filename="{!attachment.record.name}" onchange="determineFileSize(this, '{!attachment.position}');" styleclass="inputfile"/>
+
+		                        <!-- <input type="file" class="imageUploadBtn" value="{!attachment.record.body}" id="upload-image" onchange="uploadImg();" name="{!attachment.record.name}" /> -->
+
+		                        </apex:outputPanel>
+		                    </apex:repeat>
+		                <!-- </apex:outputPanel> -->
+		                <apex:commandButton value="+" style="width:20px; marg" onclick="showMoreFileInputFields(); return false;" />
+	                </apex:panelGrid>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+			<!-- <apex:pageBlockSection rendered="{!emailEditorConfig[0].Allow_Document_Upload__c}" columns="1">
+				<apex:pageBlockSectionItem rendered="{!emailEditorConfig[0].Allow_Document_Upload__c}">
+					<apex:outputLabel value="Choose Documents to upload" />
+					<apex:outputPanel id="additionalAttachments">
+	                    <apex:repeat value="{!additionalAttachments}" var="attachment">
+	                        <apex:inputFile value="{!attachment.body}" filename="{!attachment.name}" id="file" />
+	                        <br /><br />
+	                    </apex:repeat>
+	                </apex:outputPanel>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection> -->
+			
+		</apex:pageBlock>
+		<!-- </div> -->
+		<!-- <apex:inputHidden value="{!whatId}" id="hiddenBlock" /> -->
+		<!-- <apex:inputHidden value="{!recipientToRemove}" id="recipientToRemove" rendered="{!emailEditorConfig[0].Add_More_Recipents__c}" /> -->
+		<apex:inputHidden value="{!toBinding}" id="toBinding" />
+		<apex:inputHidden value="{!fromBinding}" id="fromBinding" />
+		<apex:inputHidden value="{!ccBinding}" id="ccBinding" />
+		<apex:inputHidden value="{!bccBinding}" id="bccBinding" />
+		<apex:inputHidden value="{!selectedAttsBinding}" id="selectedAttsBinding" />
+		<apex:inputHidden value="{!selectedDocsBinding}" id="selectedDocsBinding" />
+	</apex:Form>
+	<apex:stylesheet value="{!URLFOR($Resource.EmailEditor, '/css/bootstrap.custom.css')}" />
+	<c:LoadingStatusWheel />
+</apex:page>
